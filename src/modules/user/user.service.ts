@@ -13,8 +13,8 @@ export type User = any;
 
 @Injectable()
 export class UserService {
-  async insert(createUserDto: CreateReqDto): Promise<User | undefined> {
-    const { email } = createUserDto;
+  async insert(createReqDto: CreateReqDto): Promise<User | undefined> {
+    const { email } = createReqDto;
 
     const existedUser = await typeormService.source
       .getRepository(UserEntity)
@@ -28,11 +28,11 @@ export class UserService {
       throw new ForbiddenException('Email already existed.');
     }
 
-    const digestedPassword = await digestPassword(createUserDto.password);
+    const digestedPassword = await digestPassword(createReqDto.password);
 
     const newUser = await typeormService.source.getRepository(UserEntity).save(
       new UserEntity({
-        ...createUserDto,
+        ...createReqDto,
         password: digestedPassword[0],
         salt: digestedPassword[1],
       }),
