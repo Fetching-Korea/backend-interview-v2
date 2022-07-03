@@ -30,6 +30,7 @@ import { RefreshReqDto } from './dto/refresh-req.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiTags('for-guest')
   @ApiTags('for-user')
   @ApiTags('for-admin')
   @ApiResponse({

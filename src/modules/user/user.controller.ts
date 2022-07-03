@@ -62,6 +62,7 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @ApiTags('for-guest')
   @ApiTags('for-user')
   @ApiTags('for-admin')
   @ApiResponse({
