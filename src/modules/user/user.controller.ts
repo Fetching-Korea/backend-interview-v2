@@ -18,7 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserEntity } from './user.entity';
-import { CreateReqDto } from './dto/create-req.dto';
+import { UserCreateReqDto } from './dto/user-create-req.dto';
 import { UserService } from './user.service';
 import { ErrorResponseDto } from '../shared/dto/error-response.dto';
 import { LoginResDto } from '../auth/dto/login-res.dto';
@@ -68,8 +68,8 @@ export class UserController {
     description: 'Create a user or admin',
   })
   @Post()
-  async insert(@Body() createReqDto: CreateReqDto) {
-    const newUser = await this.userService.insert(createReqDto);
+  async insert(@Body() userCreateReqDto: UserCreateReqDto) {
+    const newUser = await this.userService.insert(userCreateReqDto);
 
     return <LoginResDto>await this.authService.login(newUser);
   }

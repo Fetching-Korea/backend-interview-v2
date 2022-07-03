@@ -8,7 +8,7 @@ import { ApiProperty } from '@nestjs/swagger';
     createdAt: 'ASC',
   },
 })
-@Index(['email'], { unique: true })
+@Index('IDX_USER_EMAIL', ['email'], { unique: true })
 export class UserEntity {
   @ApiProperty({ description: 'id of user' })
   @PrimaryGeneratedColumn({

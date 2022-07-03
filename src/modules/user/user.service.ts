@@ -3,7 +3,7 @@ import {
   ForbiddenException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateReqDto } from './dto/create-req.dto';
+import { UserCreateReqDto } from './dto/user-create-req.dto';
 import { typeormService } from '../../utils';
 
 import { UserEntity } from './user.entity';
@@ -13,8 +13,8 @@ export type User = any;
 
 @Injectable()
 export class UserService {
-  async insert(createReqDto: CreateReqDto): Promise<User | undefined> {
-    const { email } = createReqDto;
+  async insert(userCreateReqDto: UserCreateReqDto): Promise<User | undefined> {
+    const { email } = userCreateReqDto;
 
     const existedUser = await typeormService.source
       .getRepository(UserEntity)
@@ -28,11 +28,11 @@ export class UserService {
       throw new ForbiddenException('Email already existed.');
     }
 
-    const digestedPassword = await digestPassword(createReqDto.password);
+    const digestedPassword = await digestPassword(userCreateReqDto.password);
 
     const newUser = await typeormService.source.getRepository(UserEntity).save(
       new UserEntity({
-        ...createReqDto,
+        ...userCreateReqDto,
         password: digestedPassword[0],
         salt: digestedPassword[1],
       }),

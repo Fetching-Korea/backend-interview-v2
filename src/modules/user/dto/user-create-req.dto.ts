@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsEmail, Length } from 'class-validator';
 
-export class CreateReqDto {
+export class UserCreateReqDto {
   @ApiProperty({
     example: 'nulLeeKH',
     description: 'name',
   })
-  @Length(5, 20)
+  @Length(1, 32)
   @IsNotEmpty()
   readonly name: string;
 
@@ -14,6 +14,7 @@ export class CreateReqDto {
     example: 'i_am@nulleekh.com',
     description: 'email',
   })
+  @Length(1, 128)
   @IsEmail()
   @IsNotEmpty()
   readonly email: string;
