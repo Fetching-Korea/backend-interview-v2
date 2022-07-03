@@ -27,23 +27,26 @@ export class ReviewEntity {
   })
   id: number;
 
-  @ApiProperty({ description: 'id of product' })
-  @ManyToOne(() => ProductEntity)
+  @ApiProperty({
+    description: 'information of product',
+    example: 1,
+  })
+  @ManyToOne(() => ProductEntity, { eager: true })
   @JoinColumn({
-    name: 'product_id',
+    name: 'product',
     referencedColumnName: 'id',
     foreignKeyConstraintName: 'FK_REVIEW_PRODUCT',
   })
-  product: ProductEntity | number;
+  product: ProductEntity;
 
-  @ApiProperty({ description: 'id of user' })
-  @ManyToOne(() => UserEntity)
+  @ApiProperty({ description: 'information of user', example: 1 })
+  @ManyToOne(() => UserEntity, { eager: true })
   @JoinColumn({
-    name: 'user_id',
+    name: 'user',
     referencedColumnName: 'id',
     foreignKeyConstraintName: 'FK_REVIEW_USER',
   })
-  user: UserEntity | number;
+  user: UserEntity;
 
   @ApiProperty({ description: 'score of review' })
   @Column({
