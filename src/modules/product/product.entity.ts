@@ -1,6 +1,17 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 
+export enum EnumOrderBy {
+  NAME_ASC,
+  NAME_DESC,
+  BRAND_ASC,
+  BRAND_DESC,
+  PRICE_ASC,
+  PRICE_DESC,
+  SIZE_ASC,
+  SIZE_DESC,
+}
+
 export enum EnumSizes {
   XXXXS,
   XXXS,

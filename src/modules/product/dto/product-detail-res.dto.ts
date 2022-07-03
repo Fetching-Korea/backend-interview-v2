@@ -5,7 +5,7 @@ import { ProductEntity } from '../product.entity';
 export class ProductDetailResDto {
   @ApiProperty({
     example: ProductEntity,
-    description: 'product entity',
+    description: 'Product entity',
   })
   @IsNotEmpty()
   readonly product: ProductEntity;

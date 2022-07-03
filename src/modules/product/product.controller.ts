@@ -4,9 +4,11 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Patch,
   Post,
+  Query,
   Request,
   UnauthorizedException,
   UseGuards,
@@ -17,6 +19,7 @@ import {
   ApiOperation,
   ApiResponse,
   ApiTags,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { ProductUpdateReqDto } from './dto/product-update-req.dto';
 import { ProductService } from './product.service';
@@ -24,6 +27,8 @@ import { ErrorResponseDto } from '../shared/dto/error-response.dto';
 import { AuthService } from '../auth/auth.service';
 import { JwtGuard } from '../auth/jwt.guard';
 import { ProductDetailResDto } from './dto/product-detail-res.dto';
+import { EnumColors, EnumOrderBy, EnumSizes } from './product.entity';
+import { ProductListResDto } from './dto/product-list-res.dto';
 
 @ApiResponse({
   status: 400,
@@ -129,5 +134,72 @@ export class ProductController {
     return <ProductDetailResDto>{
       product: product,
     };
+  }
+
+  @ApiTags('for-guest')
+  @ApiTags('for-user')
+  @ApiTags('for-admin')
+  @ApiQuery({
+    name: 'pageNumber',
+    type: Number,
+    allowEmptyValue: false,
+    required: true,
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    type: Number,
+    allowEmptyValue: false,
+    required: true,
+    example: 30,
+  })
+  @ApiQuery({
+    name: 'brandFilter',
+    type: String,
+    allowEmptyValue: true,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'sizeFilter',
+    type: String,
+    enum: EnumSizes,
+    allowEmptyValue: true,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'colorFilter',
+    type: String,
+    enum: EnumColors,
+    allowEmptyValue: true,
+    required: false,
+  })
+  @ApiQuery({
+    name: 'orderBy',
+    type: String,
+    enum: EnumOrderBy,
+    isArray: true,
+    allowEmptyValue: true,
+    required: false,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List and count of products',
+    type: ProductListResDto,
+  })
+  @ApiOperation({
+    description: 'Get list of products',
+  })
+  @Get('')
+  async list(@Query() query) {
+    const productList = await this.productService.listProducts(
+      query.pageNumber || 1,
+      query.pageSize || 30,
+      query.brandFilter,
+      EnumSizes[String(query.sizeFilter)],
+      EnumColors[String(query.colorFilter)],
+      'string' === typeof query.orderBy ? [query.orderBy] : query.orderBy,
+    );
+
+    return productList;
   }
 }

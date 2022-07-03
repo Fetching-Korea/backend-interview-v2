@@ -4,7 +4,7 @@ import { IsNotEmpty, IsEmail, Length } from 'class-validator';
 export class UserCreateReqDto {
   @ApiProperty({
     example: 'nulLeeKH',
-    description: 'name',
+    description: 'Name',
   })
   @Length(1, 32)
   @IsNotEmpty()
@@ -12,7 +12,7 @@ export class UserCreateReqDto {
 
   @ApiProperty({
     example: 'i_am@nulleekh.com',
-    description: 'email',
+    description: 'Email',
   })
   @Length(1, 128)
   @IsEmail()
@@ -22,14 +22,14 @@ export class UserCreateReqDto {
   @ApiProperty({
     example: true,
     description:
-      'boolean value that indicates whether the user is admin or not',
+      'Boolean value that indicates whether the user is admin or not',
   })
   @IsNotEmpty()
   readonly isAdmin: boolean;
 
   @ApiProperty({
     example: '123',
-    description: 'password',
+    description: 'Password',
   })
   @IsNotEmpty()
   readonly password: string;
