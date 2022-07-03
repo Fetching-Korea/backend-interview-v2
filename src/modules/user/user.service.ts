@@ -8,12 +8,25 @@ import { typeormService } from '../../utils';
 
 import { UserEntity } from './user.entity';
 import { digestPassword } from '../../utils';
-
-export type User = any;
+import { ObjectLiteral } from 'typeorm';
 
 @Injectable()
 export class UserService {
-  async insert(userCreateReqDto: UserCreateReqDto): Promise<User | undefined> {
+  async insert(
+    userCreateReqDto: UserCreateReqDto,
+  ): Promise<
+    Pick<
+      UserEntity & ObjectLiteral,
+      | 'id'
+      | 'name'
+      | 'email'
+      | 'isAdmin'
+      | 'createdAt'
+      | 'updatedAt'
+      | string
+      | number
+    >
+  > {
     const { email } = userCreateReqDto;
 
     const existedUser = await typeormService.source
@@ -44,11 +57,11 @@ export class UserService {
     return result;
   }
 
-  async findAll(): Promise<User[] | undefined> {
+  async findAll(): Promise<UserEntity[]> {
     return typeormService.source.getRepository(UserEntity).find();
   }
 
-  async findOne(id: number): Promise<User | undefined> {
+  async findOne(id: number): Promise<UserEntity> {
     const foundUser = await typeormService.source
       .getRepository(UserEntity)
       .findOne({
@@ -64,7 +77,7 @@ export class UserService {
     return foundUser;
   }
 
-  async deleteOne(id: number): Promise<boolean | undefined> {
+  async deleteOne(id: number): Promise<boolean> {
     const foundUser = await typeormService.source
       .getRepository(UserEntity)
       .findOne({

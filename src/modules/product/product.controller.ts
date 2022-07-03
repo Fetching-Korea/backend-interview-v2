@@ -90,7 +90,7 @@ export class ProductController {
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Product information',
     type: ProductDetailResDto,
   })

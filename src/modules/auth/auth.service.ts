@@ -9,29 +9,58 @@ import {
   REFRESH_TOKEN_EXPIRATION_INTERVAL,
 } from '../../environments';
 import { uid } from 'rand-token';
+import { ObjectLiteral } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  async validateUser(email: string, password: string): Promise<any> {
+  async validateUser(
+    email: string,
+    receivedPassword: string,
+  ): Promise<null | Pick<
+    UserEntity & ObjectLiteral,
+    | 'id'
+    | 'name'
+    | 'email'
+    | 'isAdmin'
+    | 'createdAt'
+    | 'updatedAt'
+    | string
+    | number
+  >> {
     const user = await typeormService.source.getRepository(UserEntity).findOne({
       where: {
         email,
       },
     });
 
-    if (user && (await comparePassword(password, user.password, user.salt))) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, salt, ...result } = user;
-
-      return result;
+    if (
+      !user ||
+      !(await comparePassword(receivedPassword, user.password, user.salt))
+    ) {
+      return null;
     }
 
-    return null;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, salt, ...result } = user;
+
+    return result;
   }
 
-  async validateRefreshToken(refreshToken: string): Promise<any> {
+  async validateRefreshToken(
+    refreshToken: string,
+  ): Promise<null | Pick<
+    UserEntity & ObjectLiteral,
+    | 'id'
+    | 'name'
+    | 'email'
+    | 'isAdmin'
+    | 'createdAt'
+    | 'updatedAt'
+    | string
+    | number
+  >> {
     const userId = +(await redisService.source.getDel(
       `refresh-${refreshToken}`,
     ));
@@ -44,7 +73,10 @@ export class AuthService {
 
     if (!user) return null;
 
-    return user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, salt, ...result } = user;
+
+    return result;
   }
 
   async login(user: UserEntity): Promise<LoginResDto> {

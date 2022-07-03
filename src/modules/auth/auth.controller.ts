@@ -12,6 +12,7 @@ import { LoginResDto } from './dto/login-res.dto';
 import { AuthService } from './auth.service';
 import { LoginReqDto } from './dto/login-req.dto';
 import { RefreshReqDto } from './dto/refresh-req.dto';
+import { UserEntity } from '../user/user.entity';
 
 @ApiResponse({
   status: 400,
@@ -49,7 +50,7 @@ export class AuthController {
     );
     if (!user) throw new UnauthorizedException();
 
-    return <LoginResDto>await this.authService.login(user);
+    return <LoginResDto>await this.authService.login(<UserEntity>user);
   }
 
   @ApiTags('for-user')
@@ -68,6 +69,6 @@ export class AuthController {
       refreshReqDto.refreshToken,
     );
     if (!user) throw new UnauthorizedException();
-    return <LoginResDto>await this.authService.login(user);
+    return <LoginResDto>await this.authService.login(<UserEntity>user);
   }
 }

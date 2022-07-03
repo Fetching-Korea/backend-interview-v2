@@ -77,7 +77,7 @@ export class UserController {
   async insert(@Body() userCreateReqDto: UserCreateReqDto) {
     const newUser = await this.userService.insert(userCreateReqDto);
 
-    return <LoginResDto>await this.authService.login(newUser);
+    return <LoginResDto>await this.authService.login(<UserEntity>newUser);
   }
 
   @ApiTags('for-user')
