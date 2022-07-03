@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Param,
+  Patch,
   Post,
   Request,
   UnauthorizedException,
@@ -16,7 +17,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { ProductInsertReqDto } from './dto/product-insert-req.dto';
+import { ProductUpdateReqDto } from './dto/product-update-req.dto';
 import { ProductService } from './product.service';
 import { ErrorResponseDto } from '../shared/dto/error-response.dto';
 import { AuthService } from '../auth/auth.service';
@@ -57,10 +58,10 @@ export class ProductController {
   @Post()
   async insert(
     @Request() req,
-    @Body() productInsertReqDto: ProductInsertReqDto,
+    @Body() productUpdateReqDto: ProductUpdateReqDto,
   ) {
     if (!req.user.isAdmin) throw new UnauthorizedException();
-    const newProduct = await this.productService.insert(productInsertReqDto);
+    const newProduct = await this.productService.insert(productUpdateReqDto);
 
     return <ProductDetailResDto>{
       product: newProduct,
@@ -82,5 +83,30 @@ export class ProductController {
   remove(@Request() req, @Param('id') id: number) {
     if (!req.user.isAdmin) throw new UnauthorizedException();
     return this.productService.deleteOne(id);
+  }
+
+  @ApiTags('for-admin')
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @ApiResponse({
+    status: 201,
+    description: 'Product information',
+    type: ProductDetailResDto,
+  })
+  @ApiOperation({
+    description: 'Update a product',
+  })
+  @Patch(':id')
+  async update(
+    @Request() req,
+    @Param('id') id: number,
+    @Body() productUpdateReqDto: ProductUpdateReqDto,
+  ) {
+    if (!req.user.isAdmin) throw new UnauthorizedException();
+    const product = await this.productService.update(id, productUpdateReqDto);
+
+    return <ProductDetailResDto>{
+      product: product,
+    };
   }
 }

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, Length } from 'class-validator';
 import { EnumColors, EnumSizes } from '../product.entity';
 
-export class ProductInsertReqDto {
+export class ProductUpdateReqDto {
   @ApiProperty({
     example: 'colorful bag',
     description: 'name',
