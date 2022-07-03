@@ -3,8 +3,10 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
+  Query,
   Request,
   UseGuards,
   UseInterceptors,
@@ -12,6 +14,7 @@ import {
 import {
   ApiBearerAuth,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -21,6 +24,9 @@ import { ErrorResponseDto } from '../shared/dto/error-response.dto';
 import { AuthService } from '../auth/auth.service';
 import { JwtGuard } from '../auth/jwt.guard';
 import { ReviewDetailResDto } from './dto/review-detail-res.dto';
+import { EnumColors, EnumOrderBy, EnumSizes } from '../product/product.entity';
+import { ProductListResDto } from '../product/dto/product-list-res.dto';
+import { ReviewListResDto } from './dto/review-list-res.dto';
 
 @ApiResponse({
   status: 400,
@@ -81,5 +87,30 @@ export class ReviewController {
   remove(@Request() req, @Param('id') id: number) {
     if (!req.user.isAdmin) return this.reviewService.deleteOne(id, req.user.id);
     else return this.reviewService.deleteOne(id);
+  }
+
+  @ApiTags('for-guest')
+  @ApiTags('for-user')
+  @ApiTags('for-admin')
+  @ApiQuery({
+    name: 'product',
+    type: Number,
+    example: 1,
+    allowEmptyValue: false,
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List and of reviews',
+    type: ReviewListResDto,
+  })
+  @ApiOperation({
+    description: 'Get list of reviews',
+  })
+  @Get('')
+  async list(@Query() query) {
+    const ReviewList = await this.reviewService.listReviews(query.product);
+
+    return ReviewList;
   }
 }

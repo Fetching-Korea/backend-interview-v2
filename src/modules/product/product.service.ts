@@ -153,9 +153,6 @@ export class ProductService {
       }
     }
 
-    Logger.warn(orderBy);
-    Logger.warn(findManyOptions.order.price);
-
     const [foundProducts, count] = await typeormService.source
       .getRepository(ProductEntity)
       .findAndCount(findManyOptions);

@@ -8,7 +8,15 @@ import { ReviewUpdateReqDto } from './dto/review-update-req.dto';
 import { typeormService } from '../../utils';
 import { ReviewEntity } from './review.entity';
 import { UserEntity } from '../user/user.entity';
-import { ProductEntity } from '../product/product.entity';
+import {
+  EnumColors,
+  EnumOrderBy,
+  EnumSizes,
+  ProductEntity,
+} from '../product/product.entity';
+import { ProductListResDto } from '../product/dto/product-list-res.dto';
+import { FindManyOptions } from 'typeorm/find-options/FindManyOptions';
+import { ReviewListResDto } from './dto/review-list-res.dto';
 
 @Injectable()
 export class ReviewService {
@@ -59,5 +67,32 @@ export class ReviewService {
     return !!(await typeormService.source
       .getRepository(ReviewEntity)
       .delete(id));
+  }
+
+  async listReviews(productId: number): Promise<ReviewListResDto> {
+    const foundProduct = await typeormService.source
+      .getRepository(ProductEntity)
+      .findOne({
+        where: {
+          id: productId,
+        },
+      });
+
+    if (!foundProduct) {
+      throw new NotFoundException('Product not found.');
+    }
+
+    const findManyOptions: FindManyOptions = {
+      where: [{ product: foundProduct }],
+    };
+
+    const [foundReviews, count] = await typeormService.source
+      .getRepository(ReviewEntity)
+      .findAndCount(findManyOptions);
+
+    return <ReviewListResDto>{
+      list: foundReviews,
+      count: count,
+    };
   }
 }
