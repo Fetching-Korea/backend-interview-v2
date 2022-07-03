@@ -29,7 +29,7 @@ export class ReviewEntity {
 
   @ApiProperty({
     description: 'information of product',
-    example: 1,
+    example: ProductEntity,
   })
   @ManyToOne(() => ProductEntity, { eager: true })
   @JoinColumn({
@@ -39,7 +39,7 @@ export class ReviewEntity {
   })
   product: ProductEntity;
 
-  @ApiProperty({ description: 'information of user', example: 1 })
+  @ApiProperty({ description: 'information of user', example: UserEntity })
   @ManyToOne(() => UserEntity, { eager: true })
   @JoinColumn({
     name: 'user',
