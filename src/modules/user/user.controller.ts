@@ -46,13 +46,13 @@ export class UserController {
   ) {}
 
   @ApiTags('for-admin')
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
   @ApiResponse({
     status: 200,
     description: 'The found records',
     type: [UserEntity],
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtGuard)
   @ApiOperation({
     description: 'Get list of users',
   })
@@ -81,13 +81,13 @@ export class UserController {
 
   @ApiTags('for-user')
   @ApiTags('for-admin')
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
   @ApiResponse({
     status: 200,
     description: 'The found record',
     type: UserEntity,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtGuard)
   @ApiOperation({
     description: 'Get information of specific user',
   })
@@ -100,13 +100,13 @@ export class UserController {
 
   @ApiTags('for-user')
   @ApiTags('for-admin')
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
   @ApiResponse({
     status: 200,
     description: 'The found record is executed',
     type: Boolean,
   })
-  @ApiBearerAuth()
-  @UseGuards(JwtGuard)
   @ApiOperation({
     description: 'Delete specific user',
   })
