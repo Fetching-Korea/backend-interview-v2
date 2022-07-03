@@ -7,13 +7,11 @@ import { ProductUpdateReqDto } from './dto/product-update-req.dto';
 import { typeormService } from '../../utils';
 import { ProductEntity } from './product.entity';
 
-export type User = any;
-
 @Injectable()
 export class ProductService {
   async insert(
     productUpdateReqDto: ProductUpdateReqDto,
-  ): Promise<User | undefined> {
+  ): Promise<ProductEntity> {
     const { name } = productUpdateReqDto;
 
     const existedProduct = await typeormService.source
@@ -35,7 +33,7 @@ export class ProductService {
     );
   }
 
-  async deleteOne(id: number): Promise<boolean | undefined> {
+  async deleteOne(id: number): Promise<boolean> {
     const foundProduct = await typeormService.source
       .getRepository(ProductEntity)
       .findOne({
@@ -56,7 +54,7 @@ export class ProductService {
   async update(
     id: number,
     productUpdateReqDto: ProductUpdateReqDto,
-  ): Promise<User | undefined> {
+  ): Promise<ProductEntity> {
     const foundProduct = await typeormService.source
       .getRepository(ProductEntity)
       .findOne({
@@ -79,5 +77,21 @@ export class ProductService {
     return await typeormService.source
       .getRepository(ProductEntity)
       .save(foundProduct);
+  }
+
+  async findOne(id: number): Promise<ProductEntity> {
+    const foundProduct = await typeormService.source
+      .getRepository(ProductEntity)
+      .findOne({
+        where: {
+          id,
+        },
+      });
+
+    if (!foundProduct) {
+      throw new NotFoundException('Product not found.');
+    }
+
+    return foundProduct;
   }
 }

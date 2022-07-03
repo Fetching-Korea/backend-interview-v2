@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Delete,
+  Get,
   Param,
   Patch,
   Post,
@@ -104,6 +105,26 @@ export class ProductController {
   ) {
     if (!req.user.isAdmin) throw new UnauthorizedException();
     const product = await this.productService.update(id, productUpdateReqDto);
+
+    return <ProductDetailResDto>{
+      product: product,
+    };
+  }
+
+  @ApiTags('for-guest')
+  @ApiTags('for-user')
+  @ApiTags('for-admin')
+  @ApiResponse({
+    status: 200,
+    description: 'Product information',
+    type: ProductDetailResDto,
+  })
+  @ApiOperation({
+    description: 'Get detail of product',
+  })
+  @Get(':id')
+  async detail(@Param('id') id: number) {
+    const product = await this.productService.findOne(id);
 
     return <ProductDetailResDto>{
       product: product,
