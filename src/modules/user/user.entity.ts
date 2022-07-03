@@ -68,7 +68,7 @@ export class UserEntity {
 
   @ApiProperty({ description: 'created timestamp of user' })
   @Column({
-    type: 'date',
+    type: 'timestamp',
     name: 'created_at',
     nullable: false,
   })
@@ -76,7 +76,7 @@ export class UserEntity {
 
   @ApiProperty({ description: 'updated timestamp of user' })
   @Column({
-    type: 'date',
+    type: 'timestamp',
     name: 'updated_at',
     nullable: false,
   })

@@ -128,7 +128,7 @@ export class ProductEntity {
 
   @ApiProperty({ description: 'created timestamp of product' })
   @Column({
-    type: 'date',
+    type: 'timestamp',
     name: 'created_at',
     nullable: false,
   })
@@ -136,7 +136,7 @@ export class ProductEntity {
 
   @ApiProperty({ description: 'updated timestamp of product' })
   @Column({
-    type: 'date',
+    type: 'timestamp',
     name: 'updated_at',
     nullable: false,
   })
