@@ -77,8 +77,6 @@ export class UserService {
       throw new NotFoundException('User not found.');
     }
 
-    return !!(await typeormService.source
-      .getRepository(UserEntity)
-      .delete(foundUser));
+    return !!(await typeormService.source.getRepository(UserEntity).delete(id));
   }
 }

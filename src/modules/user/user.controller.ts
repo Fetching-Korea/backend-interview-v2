@@ -103,7 +103,7 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @ApiOperation({
-    description: 'Delete specific User',
+    description: 'Delete specific user',
   })
   @Delete(':id')
   remove(@Request() req, @Param('id') id: number) {
