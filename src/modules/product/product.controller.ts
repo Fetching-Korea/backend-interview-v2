@@ -24,6 +24,11 @@ import { JwtGuard } from '../auth/jwt.guard';
 import { ProductDetailResDto } from './dto/product-detail-res.dto';
 
 @ApiResponse({
+  status: 400,
+  description: 'BadRequest.',
+  type: ErrorResponseDto,
+})
+@ApiResponse({
   status: 401,
   description: 'Unauthorized.',
   type: ErrorResponseDto,

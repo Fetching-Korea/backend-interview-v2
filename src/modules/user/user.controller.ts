@@ -26,6 +26,11 @@ import { AuthService } from '../auth/auth.service';
 import { JwtGuard } from '../auth/jwt.guard';
 
 @ApiResponse({
+  status: 400,
+  description: 'BadRequest.',
+  type: ErrorResponseDto,
+})
+@ApiResponse({
   status: 401,
   description: 'Unauthorized.',
   type: ErrorResponseDto,

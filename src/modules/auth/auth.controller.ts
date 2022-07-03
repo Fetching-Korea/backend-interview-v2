@@ -14,6 +14,11 @@ import { LoginReqDto } from './dto/login-req.dto';
 import { RefreshReqDto } from './dto/refresh-req.dto';
 
 @ApiResponse({
+  status: 400,
+  description: 'BadRequest.',
+  type: ErrorResponseDto,
+})
+@ApiResponse({
   status: 401,
   description: 'Unauthorized.',
   type: ErrorResponseDto,
