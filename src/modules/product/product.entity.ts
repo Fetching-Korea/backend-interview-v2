@@ -89,7 +89,11 @@ export class ProductEntity {
   })
   price: number;
 
-  @ApiProperty({ enum: EnumSizes, description: 'size of product' })
+  @ApiProperty({
+    enum: EnumSizes,
+    example: '5',
+    description: 'size of product',
+  })
   @Column({
     type: 'enum',
     enum: EnumSizes,
@@ -98,7 +102,11 @@ export class ProductEntity {
   })
   size: EnumSizes;
 
-  @ApiProperty({ enum: EnumColors, description: 'color of product' })
+  @ApiProperty({
+    enum: EnumColors,
+    example: '6',
+    description: 'color of product',
+  })
   @Column({
     type: 'enum',
     enum: EnumColors,
