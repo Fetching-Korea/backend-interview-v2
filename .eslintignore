@@ -1,0 +1,6 @@
+dist/
+documentation/
+scripts/
+cmd/
+
+*.d.ts
