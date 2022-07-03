@@ -3,7 +3,6 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Post,
-  Res,
   UnauthorizedException,
   UseInterceptors,
 } from '@nestjs/common';

@@ -8,8 +8,6 @@ import { typeormService } from '../../utils';
 
 import { UserEntity } from './user.entity';
 import { digestPassword } from '../../utils';
-import { Repository } from 'typeorm';
-import { DeleteQueryBuilder } from 'typeorm/query-builder/DeleteQueryBuilder';
 
 export type User = any;
 

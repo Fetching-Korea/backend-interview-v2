@@ -7,7 +7,6 @@ import {
   Param,
   Post,
   Request,
-  Res,
   UnauthorizedException,
   UseGuards,
   UseInterceptors,
