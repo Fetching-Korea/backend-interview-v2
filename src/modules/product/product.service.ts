@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ProductInsertReqDto } from './dto/product-insert-req.dto';
 import { typeormService } from '../../utils';
 import { ProductEntity } from './product.entity';
@@ -27,5 +31,23 @@ export class ProductService {
         ...createReqDto,
       }),
     );
+  }
+
+  async deleteOne(id: number): Promise<boolean | undefined> {
+    const foundProduct = await typeormService.source
+      .getRepository(ProductEntity)
+      .findOne({
+        where: {
+          id,
+        },
+      });
+
+    if (!foundProduct) {
+      throw new NotFoundException('Product not found.');
+    }
+
+    return !!(await typeormService.source
+      .getRepository(ProductEntity)
+      .delete(id));
   }
 }

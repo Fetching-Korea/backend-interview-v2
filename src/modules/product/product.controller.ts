@@ -2,6 +2,8 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
+  Param,
   Post,
   Request,
   UnauthorizedException,
@@ -58,5 +60,22 @@ export class ProductController {
     return <ProductDetailResDto>{
       product: newProduct,
     };
+  }
+
+  @ApiTags('for-admin')
+  @ApiResponse({
+    status: 200,
+    description: 'The found record is executed',
+    type: Boolean,
+  })
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @ApiOperation({
+    description: 'Delete specific product',
+  })
+  @Delete(':id')
+  remove(@Request() req, @Param('id') id: number) {
+    if (!req.user.isAdmin) throw new UnauthorizedException();
+    return this.productService.deleteOne(id);
   }
 }
