@@ -48,7 +48,7 @@ export class UserService {
 
   async isAdmin(payload: PayloadDto) {
     const user = await this.findUserWithPayload(payload);
-    if (!user || user.admin) throw new UnauthorizedException();
+    if (!user || !user.admin) throw new UnauthorizedException();
   }
 
   async findUserWithPayload(payload: PayloadDto): Promise<User> {
