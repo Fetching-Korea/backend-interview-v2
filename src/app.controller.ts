@@ -1,4 +1,4 @@
-import { Controller, Request, Post, UseGuards } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/guard/local-auth.guard';
@@ -16,6 +16,7 @@ export class AppController {
   3. jwt를 가지고 활동 진행
   */
   @UseGuards(LocalAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('/login')
   async login(@Request() req) {
     return this.authService.login(req.user);

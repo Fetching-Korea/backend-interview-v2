@@ -1,8 +1,10 @@
+import { Review } from 'src/review/entities/review.entity'
 import {
   Entity,
   BaseEntity,
   PrimaryGeneratedColumn,
-  Column
+  Column,
+  OneToMany
 } from 'typeorm'
 
 export enum Size {
@@ -20,9 +22,11 @@ export enum Color {
   GRAY = "GRAY"
 }
 
-/**
- * 유저 테이블
- */
+export enum Order {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 @Entity()
 export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -51,4 +55,7 @@ export class Product extends BaseEntity {
     enum: Color,
   })
   color!: Color // 상품 색상
+
+  @OneToMany(() => Review, (review) => review.product)
+  reviews: Review[];  
 }

@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RegisterDto } from './dto/register.dto';
 import { User } from './entities/user.entity';
 import * as argon2 from 'argon2';
+import { PayloadDto } from 'src/utils/payload.dto';
 
 @Injectable()
 export class UserService {
@@ -15,6 +16,12 @@ export class UserService {
   async findByUsername(username: string): Promise<User> {
     return await this.userRepository.findOne({
       where: { username },
+    });
+  }
+
+  async findByUserId(userId: number): Promise<User> {
+    return await this.userRepository.findOne({
+      where: { id: userId },
     });
   }
 
@@ -37,5 +44,16 @@ export class UserService {
 
     user.password = '';
     return user;
+  }
+
+  async isAdmin(payload: PayloadDto) {
+    const user = await this.findUserWithPayload(payload);
+    if (!user || user.admin) throw new UnauthorizedException();
+  }
+
+  async findUserWithPayload(payload: PayloadDto): Promise<User> {
+    if (!payload) throw new UnauthorizedException();
+    const { userId } = payload;
+    return await this.findByUserId(userId);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import * as argon2 from 'argon2'
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
@@ -11,6 +11,7 @@ export class AuthService {
     ){}
 
     async validateUser(username: string, password: string): Promise<any> {
+        if (!username || !password) throw new BadRequestException('아이디와 비밀번호를 입력하세요');
         const user = await this.userService.findByUsername(username);
         if (!user) return null;
         const validPw = await argon2.verify(user.password, password);
