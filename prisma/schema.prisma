@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:root@localhost:3306/fetching"
+}
+
+model User {
+	userId		Int			@id @default(autoincrement())
+	id			String		@unique @db.VarChar(45)
+	password	String		@db.VarChar(255)
+	userName	String		@unique @db.VarChar(45)
+	createdAt	DateTime	@default(now())
+	sessions	Session[]
+	collections	Collection[]
+	likes		Like[]
+}
+
+model Session {
+	sessionId   String		@id @db.VarChar(255)
+	createdAt	DateTime	@default(now())
+	userId		Int
+	user		User		@relation(fields: [userId], references: [userId], onDelete: Cascade)
+}
+
+model Product {
+	productId	Int			@id @default(autoincrement())
+	name		String		@db.VarChar(45)
+	explanation String		@db.Text
+	brand		String		@db.VarChar(45)
+	cost		Int
+	size		String		@db.VarChar(45)
+	color		String		@db.VarChar(45)
+	collections	Collection[]
+	likes		Like[]
+}
+
+model Collection {
+	userId		Int
+	productId	Int
+	product		Product		@relation(fields: [productId], references: [productId])
+	user		User		@relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+	@@id([userId, productId])
+}
+
+model Like {
+	productId	Int
+	userId		Int
+	product		Product		@relation(fields: [productId], references: [productId], onDelete: Cascade)
+	user		User		@relation(fields: [userId], references: [userId], onDelete: Cascade)	
+
+	@@id([productId, userId])
+}
