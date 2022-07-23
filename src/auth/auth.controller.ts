@@ -28,7 +28,7 @@ export class AuthController {
 
 	@Delete("/logout")
 	@HttpCode(HttpStatus.OK)
-	logout(@GetCurrentUser('sessionId') sessionId: string) {
+	async logout(@GetCurrentUser('sessionId') sessionId: string) {
 		return this.authService.logout(sessionId);
 	}
 
@@ -36,7 +36,7 @@ export class AuthController {
 	@UseGuards(RtGuard)
 	@Post("/new")
 	@HttpCode(HttpStatus.OK)
-	newToken(@GetCurrentUser('sessionId') sessionId: string) {
+	async newToken(@GetCurrentUser('sessionId') sessionId: string) {
 		return this.authService.newToken(sessionId);
 	}
 }

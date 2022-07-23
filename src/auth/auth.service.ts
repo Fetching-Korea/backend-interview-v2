@@ -20,7 +20,7 @@ export class AuthService {
 			},
 			{
 				secret: 'at-fetching',
-				expiresIn: 60, 
+				expiresIn: 60 * 3, 
 			}), 
 			this.jwtService.signAsync(
 			{
@@ -131,7 +131,7 @@ export class AuthService {
 			},
 			{
 				secret: 'at-fetching',
-				expiresIn: 60, 
+				expiresIn: 60 * 3, 
 			});
 
 		return { accessToken: newAccessToken };
