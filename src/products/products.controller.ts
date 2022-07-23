@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, HttpCode, HttpStatus, Query } from '@nestjs/common';
 import { Public } from 'src/common/decorators';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -13,6 +13,25 @@ export class ProductsController {
 	@HttpCode(HttpStatus.OK)
 	async getAll(): Promise<Product[]> {
 		return this.productService.getAll();
+	}
+
+	@Public()
+	@Get("/filter")
+	@HttpCode(HttpStatus.OK)
+	async getFilter(@Query("minCost") minCost: number, @Query("maxCost") maxCost: number, // cost filtering
+					@Query("minSize") minSize: string, @Query("maxSize") maxSize: string, // size filtering
+					@Query("brand") brand: string, @Query("color") color: string)  // brand & color filtering
+	{
+		const payload = {
+			minCost,
+			maxCost,
+			minSize,
+			maxSize,
+			brand,
+			color
+		}
+
+		return this.productService.getFilter(payload);
 	}
 
 	@Get("/:id")

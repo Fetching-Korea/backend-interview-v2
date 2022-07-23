@@ -4,6 +4,6 @@ export class Product {
 	explanation: string;
 	brand: string;
 	cost: number;
-	size: string;
+	size: number;
 	color: string;
 }

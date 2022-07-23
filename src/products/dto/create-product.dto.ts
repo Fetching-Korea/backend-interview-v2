@@ -10,7 +10,7 @@ export class CreateProductDto {
 	@IsNumber()
 	readonly cost: number;
 	@IsString()
-	readonly size: string;
+	readonly size: number;
 	@IsString()
 	readonly color: string;
 }
