@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Tokens } from './types';
 import * as bcrypt from "bcrypt";
@@ -10,6 +10,16 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
 	constructor(private prismaService : PrismaService, private jwtService: JwtService){}
+
+	async validateUser(sessionId: string) {
+		const session = await this.prismaService.session.findFirst({
+			where: { sessionId }
+		});
+
+		if (!session) {
+			throw new UnauthorizedException('Access Denied.');
+		}
+	}
 
 	async getTokens(userId: number, sessionId: string): Promise<Tokens> {
 		const [at, rt] = await Promise.all([
@@ -47,10 +57,7 @@ export class AuthService {
 		});
 
 		if (userExist) {
-			throw new HttpException({
-				status: HttpStatus.FORBIDDEN,
-				error: "user data already exists",
-			}, HttpStatus.FORBIDDEN);
+			throw new ForbiddenException('user data already exists.');
 		}
 
 		const password = await bcrypt.hash(pwd, 5);

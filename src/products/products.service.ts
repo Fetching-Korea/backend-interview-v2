@@ -100,8 +100,19 @@ export class ProductsService {
 	}
 
 	async create(productData: CreateProductDto): Promise<Product> {
+		const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+
+		let realData = {
+			name: productData.name,
+			explanation: productData.explanation,
+			brand: productData.brand,
+			cost: productData.cost,
+			size: sizes.indexOf(productData.size),
+			color: productData.color
+		}
+
 		const product = await this.prismaService.product.create({
-			data: productData
+			data: realData
 		});
 
 		return product;
@@ -117,9 +128,31 @@ export class ProductsService {
 	}
 
 	async update(id: number, updateData: UpdateProductDto) {
+		const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+
+		let realData; 
+		if (updateData.size) {
+			realData = {
+				name: updateData.name,
+				explanation: updateData.explanation,
+				brand: updateData.brand,
+				cost: updateData.cost,
+				size: sizes.indexOf(updateData.size),
+				color: updateData.color
+			}
+		} else {
+			realData = {
+				name: updateData.name,
+				explanation: updateData.explanation,
+				brand: updateData.brand,
+				cost: updateData.cost,
+				color: updateData.color
+			}
+		}
+
 		const updateProduct = await this.prismaService.product.update({
 			where: { productId: id },
-			data: updateData
+			data: realData
 		});
 		
 		return updateProduct;
