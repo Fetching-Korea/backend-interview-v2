@@ -1,5 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { Public } from 'src/common/decorators';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Post, Query } from '@nestjs/common';
 import { CreateLikeDto } from './dto/create-like.dto';
 import { Like } from './entities/like.entity';
 import { LikesService } from './likes.service';
@@ -20,5 +19,11 @@ export class LikesController {
 	@HttpCode(HttpStatus.OK)
 	async getLikedProducts(@GetCurrentUser('userId') userId: number): Promise<Product[]> {
 		return this.likeService.getLikedProducts(userId);
+	}
+
+	@Delete()
+	@HttpCode(HttpStatus.OK)
+	async cancelLike(@GetCurrentUser('userId') userId: number, @Query("productId") productId: number) {
+		return this.likeService.cancelLike(userId, productId);
 	}
 }

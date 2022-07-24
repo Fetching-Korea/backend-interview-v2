@@ -6,9 +6,10 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guards';
 import { LikesModule } from './likes/likes.module';
+import { PurchaseModule } from './purchase/purchase.module';
 
 @Module({
-  imports: [ProductsModule, AuthModule, LikesModule],
+  imports: [ProductsModule, AuthModule, LikesModule, PurchaseModule],
   controllers: [AppController],
   providers: [AppService, 
 	{

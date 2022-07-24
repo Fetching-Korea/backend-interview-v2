@@ -33,7 +33,7 @@ export class ProductsController {
 		return this.productService.getFilter(payload);
 	}
 
-	@Get("/sort")  // brand, cost, size, name
+	@Get("/sort")
 	@HttpCode(HttpStatus.OK)
 	async getSort(@Query("orderBy") orderBy: object)
 	{
