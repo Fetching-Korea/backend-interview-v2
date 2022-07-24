@@ -103,8 +103,7 @@ export class AuthService {
 			await this.prismaService.session.create({
 				data: { sessionId, user: { connect: {id} }}
 			});
-
-			tokens = await this.getTokens(parseInt(id), sessionId);
+			tokens = await this.getTokens(user.userId, sessionId);
 		}
 
 		return tokens;
