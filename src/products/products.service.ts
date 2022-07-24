@@ -4,6 +4,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { FilterPayload } from './types';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductsService {
@@ -44,6 +45,57 @@ export class ProductsService {
 				]
 			}
 		});
+		return result;
+	}
+
+	async getSort(orderBy: object): Promise<unknown> {
+		let array;
+		if (typeof orderBy === "string") {
+			array = [orderBy];
+		} else {
+			array = Object.values(orderBy);
+		}
+		let baseQuery = ``;
+
+		for (let i = 0; i < array.length; i++)
+		{
+			if (i !== 0 && (array[i] === 'brand_ASC' || array[i] === 'brand_DESC' || array[i] === 'cost_ASC' ||
+							array[i] === 'cost_DESC' || array[i] === 'size_ASC'   || array[i] === 'size_DESC' ||
+							array[i] === 'name_ASC'  || array[i] === 'name_DESC')) 
+			{
+				baseQuery += ', ';
+			}
+
+			switch(array[i]) {
+				case 'brand_ASC':
+					baseQuery += `brand ASC`;
+					break;
+				case 'brand_DESC':
+					baseQuery += `brand DESC`;
+					break;
+				case 'cost_ASC':
+					baseQuery += `cost ASC`;
+					break;
+				case 'cost_DESC':
+					baseQuery += `cost DESC`;
+					break;
+				case 'size_ASC':
+					baseQuery += `size ASC`;
+					break;
+				case 'size_DESC':
+					baseQuery += `size DESC`;
+					break;
+				case 'name_ASC':
+					baseQuery += `name ASC`;
+					break;
+				case 'name_DESC':
+					baseQuery += `name DESC`;
+					break;
+			}
+		}
+
+		const result = await this.prismaService.$queryRaw`SELECT * FROM Product ORDER BY ${Prisma.raw(baseQuery)}`;
+
 		return result;
 	}
 

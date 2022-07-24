@@ -1,1 +1,1 @@
-export * from './payload.type';
+export * from './filterPayload.type';

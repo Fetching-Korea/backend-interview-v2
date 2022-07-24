@@ -15,7 +15,6 @@ export class ProductsController {
 		return this.productService.getAll();
 	}
 
-	@Public()
 	@Get("/filter")
 	@HttpCode(HttpStatus.OK)
 	async getFilter(@Query("minCost") minCost: number, @Query("maxCost") maxCost: number, // cost filtering
@@ -32,6 +31,13 @@ export class ProductsController {
 		}
 
 		return this.productService.getFilter(payload);
+	}
+
+	@Get("/sort")  // brand, cost, size, name
+	@HttpCode(HttpStatus.OK)
+	async getSort(@Query("orderBy") orderBy: object)
+	{
+		return this.productService.getSort(orderBy); 
 	}
 
 	@Get("/:id")
