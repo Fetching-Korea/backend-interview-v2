@@ -1,6 +1,8 @@
 export type FilterPayload = {
-	cost: string,
-	size: string,
+	minCost: number,
+	maxCost: number,
+	minSize: string,
+	maxSize: string,
 	brand: string,
-	name: string
+	color: string
 }
