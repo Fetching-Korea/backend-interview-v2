@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Param,
-  Headers,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -32,10 +25,7 @@ export class UsersController {
 
   @UseGuards(AuthGuard)
   @Post(':id')
-  async getUserInfo(
-    @Headers() headers: any,
-    @Param('id') id: string,
-  ): Promise<UserInfo> {
+  async getUserInfo(@Param('id') id: string): Promise<UserInfo> {
     return this.usersService.getUserInfo(id);
   }
 }

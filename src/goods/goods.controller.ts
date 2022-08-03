@@ -6,47 +6,47 @@ import {
   Patch,
   Param,
   Delete,
-  BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { GoodsService } from './goods.service';
 import { CreateGoodDto } from './dto/create-good.dto';
-import { UpdateGoodDto } from './dto/update-good.dto';
+import { Good } from './entities/good.entity';
+import { GoodsInfo } from './goodsInfo';
 
 @Controller('goods')
 export class GoodsController {
   constructor(private readonly goodsService: GoodsService) {}
 
   @Post('create')
-  create(@Body() createGoodDto: CreateGoodDto) {
-    const { name, description, brand, price, size, color } = createGoodDto;
-
-    console.log(name, description, brand, price, size, color);
+  async create(@Body() createGoodDto: CreateGoodDto): Promise<void> {
     return this.goodsService.create(createGoodDto);
   }
 
   @Get()
-  findAll() {
-    return this.goodsService.findAll();
+  async getAll(): Promise<Good[]> {
+    return this.goodsService.goodsList();
+  }
+
+  @Get('search')
+  async findBySearch(@Query() query) {
+    return this.goodsService.findGoods(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    if (+id < 1) {
-      throw new BadRequestException('id should be larger than 0');
-    }
-    return this.goodsService.findOne(+id);
+  async goodsInfo(@Param('id') id: string): Promise<GoodsInfo> {
+    return this.goodsService.goodsInfo(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGoodDto: UpdateGoodDto) {
-    if (+id < 1) {
-      throw new BadRequestException('id should be larger than 0');
-    }
-    return this.goodsService.update(+id, updateGoodDto);
+  async modifyGoods(
+    @Param('id') id: string,
+    @Body() goods: CreateGoodDto,
+  ): Promise<void> {
+    return this.goodsService.updateGoods(id, goods);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.goodsService.remove(+id);
+  async removeGoods(@Param('id') id: string): Promise<void> {
+    return this.goodsService.removeGoods(id);
   }
 }

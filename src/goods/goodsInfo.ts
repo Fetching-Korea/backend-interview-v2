@@ -1,26 +1,10 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
-
-@Entity()
-export class Good {
-  @PrimaryColumn()
+export class GoodsInfo {
   id: string;
-
-  @Column({ length: 60 })
   name: string;
-
-  @Column({ length: 300 })
   description: string;
-
-  @Column({ length: 30 })
   brand: string;
-
-  @Column()
   price: number;
-
-  @Column()
   size: number;
-
-  @Column({ length: 10 })
   color: string;
 
   constructor(
