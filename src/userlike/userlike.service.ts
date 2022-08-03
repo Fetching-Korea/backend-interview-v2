@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserLike } from './entities/userlike.entity';
+import * as uuid from 'uuid';
 
 @Injectable()
 export class UserLikeService {
@@ -24,7 +25,9 @@ export class UserLikeService {
         goods_id: goodsId,
       });
     } else {
+      const id = uuid.v4();
       const newLike = new UserLike();
+      newLike.id = id;
       newLike.user_id = userId;
       newLike.goods_id = goodsId;
       await this.userlikeRepository.save(newLike);
