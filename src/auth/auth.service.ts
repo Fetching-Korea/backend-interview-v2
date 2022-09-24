@@ -16,11 +16,11 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
 
-    async signUp(authCredentialDto: AuthCredentialDto) : Promise<string> {
+    async signUp(authCredentialDto: AuthCredentialDto) : Promise<{statusCode:string, contents:string}> {
         return this.userRepository.createUser(authCredentialDto);
     }
 
-    async signIn(authLoginDto: AuthLoginDto) : Promise<{accessToken : string}> {
+    async signIn(authLoginDto: AuthLoginDto) : Promise<{statusCode:string, contents : string}> {
         const {customId , password } = authLoginDto;
         const user = await this.userRepository.findOne({ customId });
 
@@ -28,7 +28,7 @@ export class AuthService {
             const payload = { customId : user.customId };
             const accessToken = await this.jwtService.sign(payload);
 
-            return {accessToken : accessToken};
+            return {statusCode:"200", contents : accessToken};
         }
         else{
             throw new UnauthorizedException('login failed');

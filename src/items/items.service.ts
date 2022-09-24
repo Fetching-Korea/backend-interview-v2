@@ -12,28 +12,29 @@ export class ItemsService {
         private itemRepository: ItemRepository
     ) {}
     
-    async getItemById(id: number): Promise <Item> {
+    async getItemById(id: number): Promise <{statusCode:string, contents:Item}> {
         const found = await this.itemRepository.findOne({where: {id}});
 
         if(!found)
             throw new NotFoundException('Item not found');
-        return found;
+        return {statusCode: "200", contents: found};
     }
 
-    async getItemAll(): Promise <Item[]> {
-        return this.itemRepository.find();
+    async getItemAll(): Promise <{statusCode:string, contents:Item[]}> {
+        return {statusCode: "200", contents: await this.itemRepository.find()};
     }
 
-    async getItemActiveAll(page : number, limit : number): Promise <Item[]> {
-        return this.itemRepository.find({
+    async getItemActiveAll(page : number, limit : number): Promise <{statusCode:string, contents:Item[]}> {
+        const found = await this.itemRepository.find({
             where: {status: ItemStatus.Active},
             skip: (page - 1) * limit,
             take: limit
         });
+        return {statusCode: "200", contents: found};
     }
     
-    async getSearchedItems(search: string, page : number, limit : number): Promise<Item[]> {
-        return this.itemRepository.find({
+    async getSearchedItems(search: string, page : number, limit : number): Promise<{statusCode:string, contents:Item[]}> {
+        const found = await this.itemRepository.find({
             where : [
                 {name: Like(`%${search}%`)} ,
                 {description: Like(`%${search}%`)} ,
@@ -44,6 +45,7 @@ export class ItemsService {
             skip: (page - 1) * limit,
             take: limit
         });
+        return {statusCode: "200", contents: found};
     }
 
     async getFilteredItems(
@@ -51,79 +53,81 @@ export class ItemsService {
             filterValue: string = "",
             page : number,
             limit : number
-        ): Promise<Item[]> {
+        ): Promise<{statusCode:string, contents:Item[]}> {
+            let found;
         switch(filterType) {
             case "brand":
-                return this.itemRepository.find({
+                found = await this.itemRepository.find({
                     where: {brand: filterValue},
                     skip: (page - 1) * limit,
                     take: limit
                 });
-                break;
+                return {statusCode: "200", contents: found};
             case "color":
-                return this.itemRepository.find({
+                found = await this.itemRepository.find({
                     where: {color: filterValue},
                     skip: (page - 1) * limit,
                     take: limit
                 });
-                break;
+                return {statusCode: "200", contents: found};
             case "size":
-                return this.itemRepository.find({
+                found = await this.itemRepository.find({
                     where: {size: filterValue},
                     skip: (page - 1) * limit,
                     take: limit
                 });
-                break;
+                return {statusCode: "200", contents: found};
             default:
                 throw new NotFoundException('Filter type not found');
         }
     }
 
-    async getSortedItems(sortType: string , sortValue : boolean ,page : number, limit : number): Promise<Item[]> {
+    async getSortedItems(sortType: string , sortValue : boolean ,page : number, limit : number): Promise<{statusCode:string, contents:Item[]}> {
         const sortValueString = sortValue ? "DESC" : "ASC";
+        let found;
         switch(sortType) {
             case "price":
-                return this.itemRepository.find({
+                found = await this.itemRepository.find({
                     order: {price: sortValueString},
                     skip: (page - 1) * limit,
                     take: limit,
                     where: {status: ItemStatus.Active}
                 });
-                break;
+                return {statusCode: "200", contents: found};
             case "name":
-                return this.itemRepository.find({
+                found = await this.itemRepository.find({
                     order: {name: sortValueString},
                     skip: (page - 1) * limit,
                     take: limit,
                     where: {status: ItemStatus.Active}
                 });
-                break;
+                return {statusCode: "200", contents: found};
             case "datetime":
-                return this.itemRepository.find({
+                found = await this.itemRepository.find({
                     order: {created_at: sortValueString},
                     skip: (page - 1) * limit,
                     take: limit,
                     where: {status: ItemStatus.Active}
                 });
-                break;
+                return {statusCode: "200", contents: found};
             case "reviews":
-                return this.itemRepository.query(`
+                found = await this.itemRepository.query(`
                     SELECT * FROM item WHERE status = 'active'
                     ORDER BY (SELECT COUNT(*) FROM review WHERE review."itemId" = item.id) ${sortValueString}
                     LIMIT ${limit} OFFSET ${(page - 1) * limit}
                 `);
+                return {statusCode: "200", contents: found};
             default:
                 throw new NotFoundException('Sort type not found');
         }
     }
 
-    async createItem(createItemsDto: CreateItemsDto): Promise<Item> {
-
+    async createItem(createItemsDto: CreateItemsDto): Promise<{statusCode:string, contents:Item}> {
         return this.itemRepository.createItem(createItemsDto);
     }
 
-    async updateItem(id: number, createItemsDto: CreateItemsDto): Promise<Item> {
-        const item = await this.getItemById(id);
+    async updateItem(id: number, createItemsDto: CreateItemsDto): Promise<{statusCode:string, contents:Item}> {
+        const item = await (await this.getItemById(id)).contents;
         const { name, description, brand, price, size, color } = createItemsDto;
 
         item.name = name ? name : item.name;
@@ -133,18 +137,20 @@ export class ItemsService {
         item.size = size ? size : item.size;
         item.color = color ? color : item.color;
         await this.itemRepository.save(item);
-        return item;
+        return {statusCode: "200", contents: item};
     }
 
-    async deleteItem(id: number): Promise<void> {
+    async deleteItem(id: number): Promise<{statusCode:string}> {
         const result = await this.itemRepository.delete(id);
         if(result.affected === 0)
             throw new NotFoundException('Item not found');
+        return {statusCode: "200"};
     }
 
-    async updateItemStatus(id: number, status: ItemStatus): Promise<void> {
-        const item = await this.getItemById(id);
+    async updateItemStatus(id: number, status: ItemStatus): Promise<{statusCode:string}> {
+        const item = await (await this.getItemById(id)).contents;
         item.status = status;
         await this.itemRepository.save(item);
+        return {statusCode: "200"};
     }
 }

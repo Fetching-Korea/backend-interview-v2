@@ -12,18 +12,12 @@ export class AuthController {
         private authService: AuthService
     ) {}
     @Post('/signup')
-    signUp(@Body(ValidationPipe) authCredentialDto: AuthCredentialDto): Promise<string> {
+    signUp(@Body(ValidationPipe) authCredentialDto: AuthCredentialDto): Promise<{statusCode:string, contents:string}> {
         return this.authService.signUp(authCredentialDto);
     }
 
     @Post('/signin')
-    signIn(@Body(ValidationPipe) authLoginDto: AuthLoginDto): Promise<{accessToken : string}> {
+    signIn(@Body(ValidationPipe) authLoginDto: AuthLoginDto): Promise<{statusCode:string, contents:string}> {
         return this.authService.signIn(authLoginDto);
-    }
-
-    @Post('/test')
-    @UseGuards(AuthGuard())
-    test(@GetUser() user: User) {
-        console.log(user);
     }
 }

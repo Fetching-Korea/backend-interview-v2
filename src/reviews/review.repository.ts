@@ -5,7 +5,7 @@ import { Review } from "./review.entity";
 
 @EntityRepository(Review)
 export class ReviewRepository extends Repository<Review>{
-    async createReview(createReviewDto, user: User, item : Item): Promise<Review> {
+    async createReview(createReviewDto, user: User, item : Item): Promise<{statusCode:string, contents:Review}> {
         const { rating, comment } = createReviewDto;
 
         const review = this.create({
@@ -16,6 +16,6 @@ export class ReviewRepository extends Repository<Review>{
         })
 
         await this.save(review);
-        return review;
+        return {statusCode:"200", contents:review};
     }
 }
