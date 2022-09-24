@@ -1,4 +1,4 @@
-import { BaseEntity, PrimaryGeneratedColumn, Column, Entity } from "typeorm";
+import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { ItemStatus } from "./itemsStatus.enum";
 
 @Entity()
@@ -26,5 +26,11 @@ export class Item extends BaseEntity {
 
     @Column()
     status: ItemStatus;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @UpdateDateColumn()
+    updated_at: Date;
 
 }

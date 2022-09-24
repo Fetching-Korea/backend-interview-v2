@@ -1,17 +1,17 @@
 import { Item } from "src/items/items.entity";
 import { User } from "src/users/user.entity";
-import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Review extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => User)
+    @ManyToOne(() => User)
     @JoinColumn()
     user: User;
 
-    @OneToOne(() => Item)
+    @ManyToOne(() => Item)
     @JoinColumn()
     item: Item;
 

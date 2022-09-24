@@ -4,6 +4,7 @@ import { CreateItemsDto } from './dto/create-items.dto';
 import { ItemRepository } from "./item.repository";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Item } from './items.entity';
+import { Like } from 'typeorm';
 @Injectable()
 export class ItemsService {
     constructor(
@@ -23,8 +24,97 @@ export class ItemsService {
         return this.itemRepository.find();
     }
 
-    async getItemActiveAll(): Promise <Item[]> {
-        return this.itemRepository.find({where: {status: ItemStatus.Active}});
+    async getItemActiveAll(page : number, limit : number): Promise <Item[]> {
+        return this.itemRepository.find({
+            where: {status: ItemStatus.Active},
+            skip: (page - 1) * limit,
+            take: limit
+        });
+    }
+    
+    async getSearchedItems(search: string, page : number, limit : number): Promise<Item[]> {
+        return this.itemRepository.find({
+            where : [
+                {name: Like(`%${search}%`)} ,
+                {description: Like(`%${search}%`)} ,
+                {brand: Like(`%${search}%`)} ,
+                {color: Like(`%${search}%`)},
+                {size: Like(`%${search}%`)}
+            ],
+            skip: (page - 1) * limit,
+            take: limit
+        });
+    }
+
+    async getFilteredItems(
+            filterType: string = "",
+            filterValue: string = "",
+            page : number,
+            limit : number
+        ): Promise<Item[]> {
+        switch(filterType) {
+            case "brand":
+                return this.itemRepository.find({
+                    where: {brand: filterValue},
+                    skip: (page - 1) * limit,
+                    take: limit
+                });
+                break;
+            case "color":
+                return this.itemRepository.find({
+                    where: {color: filterValue},
+                    skip: (page - 1) * limit,
+                    take: limit
+                });
+                break;
+            case "size":
+                return this.itemRepository.find({
+                    where: {size: filterValue},
+                    skip: (page - 1) * limit,
+                    take: limit
+                });
+                break;
+            default:
+                throw new NotFoundException('Filter type not found');
+        }
+    }
+
+    async getSortedItems(sortType: string , sortValue : boolean ,page : number, limit : number): Promise<Item[]> {
+        const sortValueString = sortValue ? "DESC" : "ASC";
+        switch(sortType) {
+            case "price":
+                return this.itemRepository.find({
+                    order: {price: sortValueString},
+                    skip: (page - 1) * limit,
+                    take: limit,
+                    where: {status: ItemStatus.Active}
+                });
+                break;
+            case "name":
+                return this.itemRepository.find({
+                    order: {name: sortValueString},
+                    skip: (page - 1) * limit,
+                    take: limit,
+                    where: {status: ItemStatus.Active}
+                });
+                break;
+            case "datetime":
+                return this.itemRepository.find({
+                    order: {created_at: sortValueString},
+                    skip: (page - 1) * limit,
+                    take: limit,
+                    where: {status: ItemStatus.Active}
+                });
+                break;
+            case "reviews":
+                return this.itemRepository.query(`
+                    SELECT * FROM item WHERE status = 'active'
+                    ORDER BY (SELECT COUNT(*) FROM review WHERE review."itemId" = item.id) ${sortValueString}
+                    LIMIT ${limit} OFFSET ${(page - 1) * limit}
+                `);
+            default:
+                throw new NotFoundException('Sort type not found');
+        }
     }
 
     async createItem(createItemsDto: CreateItemsDto): Promise<Item> {
