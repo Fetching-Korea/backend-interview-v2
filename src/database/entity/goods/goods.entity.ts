@@ -1,10 +1,12 @@
 import {
     Column,
+    CreateDateColumn,
     Entity,
     JoinColumn,
     ManyToOne,
     OneToMany,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 import { Company } from '../company/company.entity';
 import { Post } from '../post/post.entity';
@@ -36,6 +38,21 @@ export class Goods {
 
     @Column({ type: 'varchar', name: 'company_title' })
     companyTitle: string;
+
+    @CreateDateColumn({
+        type: 'datetime',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+        name: 'created_at',
+    })
+    createdAt?: Date;
+
+    @UpdateDateColumn({
+        type: 'datetime',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+        onUpdate: 'CURRENT_TIMESTAMP(6)',
+        name: 'updated_at',
+    })
+    updatedAt?: Date;
 
     @ManyToOne(() => Company, (company) => company.goodsList)
     @JoinColumn({ name: 'company_id', referencedColumnName: 'id' })

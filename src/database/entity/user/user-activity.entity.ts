@@ -1,5 +1,6 @@
 import {
     Column,
+    CreateDateColumn,
     Entity,
     Index,
     JoinColumn,
@@ -34,6 +35,13 @@ export class UserActivity {
 
     @Column({ type: 'int', name: 'user_id' })
     userId: number;
+
+    @CreateDateColumn({
+        type: 'datetime',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+        name: 'created_at',
+    })
+    createdAt?: Date;
 
     @ManyToOne(() => User, (user) => user.userActivities)
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })

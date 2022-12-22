@@ -1,9 +1,11 @@
 import {
     Column,
+    CreateDateColumn,
     Entity,
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 import { Goods } from '../goods/goods.entity';
 import { User } from '../user/user.entity';
@@ -24,6 +26,21 @@ export class Post {
 
     @Column({ type: 'int', name: 'goods_id' })
     goodsId: number;
+
+    @CreateDateColumn({
+        type: 'datetime',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+        name: 'created_at',
+    })
+    createdAt?: Date;
+
+    @UpdateDateColumn({
+        type: 'datetime',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+        onUpdate: 'CURRENT_TIMESTAMP(6)',
+        name: 'updated_at',
+    })
+    updatedAt?: Date;
 
     @ManyToOne(() => User, (user) => user.posts)
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })

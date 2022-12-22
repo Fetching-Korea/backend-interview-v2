@@ -1,10 +1,12 @@
 import { ColumnNumericTransformer } from '@src/database/util/transformer';
 import {
     Column,
+    CreateDateColumn,
     Entity,
     JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 import { Goods } from './goods.entity';
 
@@ -42,6 +44,21 @@ export class Commodity {
 
     @Column({ type: 'varchar', name: 'status' })
     status: CommodityStatus;
+
+    @CreateDateColumn({
+        type: 'datetime',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+        name: 'created_at',
+    })
+    createdAt?: Date;
+
+    @UpdateDateColumn({
+        type: 'datetime',
+        default: () => 'CURRENT_TIMESTAMP(6)',
+        onUpdate: 'CURRENT_TIMESTAMP(6)',
+        name: 'updated_at',
+    })
+    updatedAt?: Date;
 
     @ManyToOne(() => Goods, (goods) => goods.commodities)
     @JoinColumn({ name: 'goods_id', referencedColumnName: 'id' })
