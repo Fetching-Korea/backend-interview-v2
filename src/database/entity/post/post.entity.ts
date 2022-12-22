@@ -7,7 +7,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { Goods } from '../goods/goods.entity';
+import { Commodity } from '../goods/commodity.entity';
 import { User } from '../user/user.entity';
 
 @Entity({ name: 'post' })
@@ -24,8 +24,8 @@ export class Post {
     @Column({ type: 'int', name: 'user_id' })
     userId: number;
 
-    @Column({ type: 'int', name: 'goods_id' })
-    goodsId: number;
+    @Column({ type: 'int', name: 'commodity_id' })
+    commodityId: number;
 
     @CreateDateColumn({
         type: 'datetime',
@@ -46,7 +46,7 @@ export class Post {
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
     user?: User;
 
-    @ManyToOne(() => Goods, (goods) => goods.posts)
-    @JoinColumn({ name: 'goods_id', referencedColumnName: 'id' })
-    goods?: Goods;
+    @ManyToOne(() => Commodity, (commodity) => commodity.posts)
+    @JoinColumn({ name: 'commodity_id', referencedColumnName: 'id' })
+    commodity?: Commodity;
 }

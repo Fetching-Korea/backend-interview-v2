@@ -4,15 +4,14 @@ import {
     CreateDateColumn,
     Entity,
     JoinColumn,
-    ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { Goods } from './goods.entity';
+import { Post } from '../post/post.entity';
 
 export enum CommodityStatus {
     READY = 'READY',
-    SOLD = 'SOLD',
     EXPIRE = 'EXPIRE',
 }
 
@@ -21,11 +20,14 @@ export class Commodity {
     @PrimaryGeneratedColumn('increment', { type: 'int', name: 'id' })
     id?: number;
 
-    @Column({ type: 'int', name: 'goods_id' })
-    goodsId: number;
-
     @Column({ type: 'varchar', name: 'title' })
     title: string;
+
+    @Column({ type: 'varchar', name: 'description' })
+    description: string;
+
+    @Column({ type: 'varchar', name: 'company' })
+    company: string;
 
     @Column({ type: 'varchar', name: 'size' })
     size: string;
@@ -60,7 +62,7 @@ export class Commodity {
     })
     updatedAt?: Date;
 
-    @ManyToOne(() => Goods, (goods) => goods.commodities)
-    @JoinColumn({ name: 'goods_id', referencedColumnName: 'id' })
-    goods?: Goods;
+    @OneToMany(() => Post, (post) => post.commodity)
+    @JoinColumn({ name: 'id', referencedColumnName: 'commodityId' })
+    posts?: Post[];
 }

@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { CommodityModule } from './commodity/commodity.module';
 
 const envFilePath = `config/.env${
     process.env.stage && process.env.stage !== 'local' ? '' : `.local`
@@ -17,6 +18,7 @@ const envFilePath = `config/.env${
         DatabaseModule,
         UserModule,
         AuthModule,
+        CommodityModule,
     ],
 })
 export class AppModule {}
