@@ -10,7 +10,7 @@ import {
 import { User } from './user.entity';
 
 export enum UserActivityTarget {
-    GOODS = 'GOODS',
+    COMMODITY = 'COMMODITY',
     POST = 'POST',
 }
 
@@ -18,7 +18,7 @@ export enum UserActivityType {
     LIKE = 'LIKE',
 }
 
-@Index(['target', 'type', 'userId'])
+@Index(['type', 'targetId', 'userId'])
 @Entity({ name: 'user_activity' })
 export class UserActivity {
     @PrimaryGeneratedColumn('increment', { type: 'bigint', name: 'id' })

@@ -4,6 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { CommodityModule } from './commodity/commodity.module';
+import { StatsModule } from './stats/stats.module';
 
 const envFilePath = `config/.env${
     process.env.stage && process.env.stage !== 'local' ? '' : `.local`
@@ -19,6 +20,7 @@ const envFilePath = `config/.env${
         UserModule,
         AuthModule,
         CommodityModule,
+        StatsModule,
     ],
 })
 export class AppModule {}

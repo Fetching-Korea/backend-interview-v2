@@ -16,20 +16,17 @@ export class UserService extends RepositoryService<User> {
         super(db, User);
     }
 
-    async create(dto: CreateUserDto): Promise<User> {
+    async create(dto: CreateUserDto) {
         const hashPassword = await bcrypt.hash(dto.password, 10);
         const user: User = {
             ...dto,
             password: hashPassword,
             tier: UserTier.NORMAL,
         };
-        return await this.repository.save(user);
+        await this.repository.insert(user);
     }
 
-    async update(
-        user: User,
-        dto: UpdateUserDto & { refreshToken?: string },
-    ): Promise<boolean> {
+    async update(user: User, dto: UpdateUserDto & { refreshToken?: string }) {
         if (!Object.values(dto).length) return true;
         const payload = { ...dto };
         if (dto.password) {
@@ -37,7 +34,6 @@ export class UserService extends RepositoryService<User> {
             payload['password'] = hashPassword;
         }
         await this.repository.update(user.id!, payload);
-        return true;
     }
 
     async isExistEmail(email: string): Promise<boolean> {

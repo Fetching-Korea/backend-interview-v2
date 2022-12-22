@@ -22,7 +22,7 @@ export class CommodityService extends RepositoryService<Commodity> {
             ...dto,
             status: CommodityStatus.READY,
         };
-        return await this.repository.save(commodity);
+        await this.repository.insert(commodity);
     }
 
     async update(id: number, dto: UpdateCommodityDto) {
