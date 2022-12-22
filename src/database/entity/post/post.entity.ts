@@ -4,11 +4,13 @@ import {
     Entity,
     JoinColumn,
     ManyToOne,
+    OneToMany,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { Commodity } from '../goods/commodity.entity';
 import { User } from '../user/user.entity';
+import { PostImage } from './post-image.entity';
 
 @Entity({ name: 'post' })
 export class Post {
@@ -49,4 +51,8 @@ export class Post {
     @ManyToOne(() => Commodity, (commodity) => commodity.posts)
     @JoinColumn({ name: 'commodity_id', referencedColumnName: 'id' })
     commodity?: Commodity;
+
+    @OneToMany(() => PostImage, (image) => image.post)
+    @JoinColumn({ name: 'id', referencedColumnName: 'postId' })
+    images?: PostImage[];
 }

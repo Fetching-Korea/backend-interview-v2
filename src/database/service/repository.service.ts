@@ -1,6 +1,11 @@
 import { ListDto } from '@src/common/dto/list.dto';
 import { EdgeDto } from '@src/common/dto/pagination.dto';
-import { EntityManager, EntityTarget, FindOptionsWhere } from 'typeorm';
+import {
+    EntityManager,
+    EntityTarget,
+    FindOptionsRelations,
+    FindOptionsWhere,
+} from 'typeorm';
 import { ObjectLiteral } from 'typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { toOrder, toWhere } from '../util/query-builder';
@@ -14,7 +19,10 @@ export abstract class RepositoryService<E extends ObjectLiteral> {
         this.repository = dataSource.getRepository(target);
     }
 
-    async findBy(findDto: Record<string, any>): Promise<ListDto<E>> {
+    async findBy(
+        findDto: Record<string, any>,
+        relations?: FindOptionsRelations<E>,
+    ): Promise<ListDto<E>> {
         const { count, page, order: orderDto, ...dto } = findDto;
         const order = toOrder(orderDto);
         const skip = (page - 1) * count;
@@ -24,6 +32,7 @@ export abstract class RepositoryService<E extends ObjectLiteral> {
             take: count,
             skip,
             order,
+            relations,
         });
         const edge = await this.getEdge(where, { count, page });
         return { items, edge };

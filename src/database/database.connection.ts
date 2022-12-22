@@ -44,7 +44,7 @@ const getDatabaseOption = (configService: ConfigService): DataSourceOptions => {
         extra: {
             connectionLimit: 10,
         },
-        synchronize: true,
+        synchronize: false,
         logging: ['query', 'error'],
     };
 };
