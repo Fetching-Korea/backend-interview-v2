@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ProductModule } from './Product/.module';
 import { CommentModule } from './Comment/.module';
 import { UserModule } from './User/.module';
+import { AuthModule } from './auth/.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
@@ -14,6 +15,7 @@ import { Comment } from './Comment/.entity';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    AuthModule,
     UserModule,
     ProductModule,
     CommentModule,
