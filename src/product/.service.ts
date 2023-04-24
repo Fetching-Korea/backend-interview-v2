@@ -7,6 +7,9 @@ import { Sort } from '../enum/sort';
 
 @Injectable()
 export class ProductService {
+  constructor(
+    @InjectRepository(Product) private productRepository: Repository<Product>,
+  ) {}
   private findAllSelection = {
     created_at: true,
     name: true,
@@ -14,9 +17,7 @@ export class ProductService {
     price: true,
     discount: true,
   };
-  constructor(
-    @InjectRepository(Product) private productRepository: Repository<Product>,
-  ) {}
+
   create(createProductDto: CreateProductDto) {
     const product: Product = new Product();
     product.name = createProductDto.name;

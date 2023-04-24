@@ -1,30 +1,26 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductModule } from './product/.module';
+import { ProductModule } from './Product/.module';
+import { CommentModule } from './Comment/.module';
+import { UserModule } from './User/.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Product } from './product/.entity';
+import { Product } from './Product/.entity';
+import { User } from './User/.entity';
+import { Comment } from './Comment/.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    UserModule,
     ProductModule,
+    CommentModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `../.env`,
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: 'localhost',
-    //   port: 3306,
-    //   username: 'root',
-    //   password: 'teher@n1',
-    //   database: 'fetching',
-    //   entities: [Product],
-    //   synchronize: true,
-    // }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
@@ -34,7 +30,7 @@ import { Product } from './product/.entity';
         username: config.get('DATABASE_USERNAME'),
         password: config.get('DATABASE_PASSWORD'),
         database: config.get('DATABASE_NAME'),
-        entities: [Product],
+        entities: [Product, User, Comment],
         synchronize: true,
       }),
       inject: [ConfigService],

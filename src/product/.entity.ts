@@ -7,8 +7,10 @@ import {
   IsNull,
   CreateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { CreateProductDto } from './.dto';
+import { Comment } from 'src/Comment/.entity';
 
 @Entity()
 export class Product {
@@ -38,6 +40,9 @@ export class Product {
   @Max(100)
   @Column({ default: 0 })
   discount: number;
+
+  @OneToMany(() => Comment, (comment) => comment.product, { nullable: true })
+  comments: Comment[];
 
   @DeleteDateColumn()
   deleted_at: Date;
