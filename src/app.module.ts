@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ProductModule } from './Product/.module';
 import { CommentModule } from './Comment/.module';
 import { UserModule } from './User/.module';
@@ -33,7 +31,5 @@ import { Comment } from './Comment/.entity';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
