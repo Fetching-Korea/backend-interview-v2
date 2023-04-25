@@ -1,29 +1,39 @@
-# 백엔드 채용 과제
+# Nest.JS Shopping Mall Server
 
-## 주제
+## Used Technologies
 
-- Nest.JS를 사용해 간단한 쇼핑몰 서버를 구현해주세요!
+- Nest.js 8.0
+- MySQL 8.0.22
+- TypeORM 0.3.15
 
-## 구현
+## Specification
 
-- JWT에 기반한 로그인 시스템이 있어야 합니다.
-- 상품 정보에 관한 CRUD가 모두 있어야 합니다. (상품 리스트, 상품 상세, 상품 생성, 상품 수정, 상품 삭제)
-- 상품 정보에 필요한 항목은 상품 이름, 상품 설명, 상품 브랜드, 상품 가격, 상품 사이즈, 상품 색상입니다.
-- 최소 3개 이상의 필터링이 구현된 상품 목록이 있어야 합니다.
-- 최소 3개 이상의 정렬이 구현된 상품 목록이 있어야 합니다.
-- 리뷰, 좋아요 등 유저 관련 기능이 1개 이상 포함되어야 합니다.
-- 프레임워크는 Nest.JS, 언어는 Typescript를 사용합니다.
-- ORM 사용 가능합니다. (TypeORM, Sequelize)
+- JWT Login System
+- Feature(Product filtering&Sorting,Commenting)
+- Tables(User, Product, Comment)
+- DDD
 
-## 제출 방법
+## API Documentation
 
-이 리포지토리를 fork하여 개발한 후, PR을 보내주세요.
+At [here](https://documenter.getpostman.com/view/13208857/2s93Y6rdro)
 
-## 목적
-- RESTful API에 대한 이해도 검증
-- SQL에 대한 이해도 검증
-- 인증시스템에 대한 이해도 검증
+## DB Specification
 
-## 문의 사항
-
-- 과제를 수행하며 궁금한 점이 생기시면 hoseung.choi@fetching.co.kr로 문의해주세요
+| Entity name | Column name | Type         | Key | Null | Default              | Extra          |
+| ----------- | ----------- | ------------ | --- | ---- | -------------------- | -------------- |
+| User        | id          | int          | pk  | N    |                      | Auto increment |
+|             | email       | varchar(255) |     | N    |                      |                |
+|             | password    | varchar(255) |     | N    |                      |                |
+| Product     | id          | int          | pk  | N    |                      | Auto increment |
+|             | created_at  | timestamp(6) |     | N    | current_timestamp(6) |                |
+|             | deleted_at  | datetime(6)  |     | Y    |                      |                |
+|             | name        | varchar(255) |     | N    |                      |                |
+|             | description | varchar(255) |     | N    |                      |                |
+|             | brand       | varchar(255) |     | N    |                      |                |
+|             | price       | int          |     | N    |                      |                |
+|             | discount    | int          |     | N    | 0                    |                |
+| Comment     | id          | int          | pk  | N    |                      | Auto increment |
+|             | created_at  | timestamp(6) |     | N    |                      |                |
+|             | comment     | varchar(255) |     | N    |                      |                |
+|             | productId   | int          | mk  | Y    |                      |                |
+|             | userId      | int          | mk  | Y    |                      |                |
