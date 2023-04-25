@@ -9,12 +9,11 @@ import {
   DeleteDateColumn,
   OneToMany,
 } from 'typeorm';
-import { CreateProductDto } from './.dto';
 import { Comment } from 'src/Comment/.entity';
 
 @Entity()
 export class Product {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @CreateDateColumn({ type: 'timestamp' })
@@ -22,6 +21,9 @@ export class Product {
 
   @Column()
   name: string;
+
+  @Column()
+  description: string;
 
   @Column()
   brand: string;
@@ -41,7 +43,9 @@ export class Product {
   @Column({ default: 0 })
   discount: number;
 
-  @OneToMany(() => Comment, (comment) => comment.product, { nullable: true })
+  @OneToMany(() => Comment, (comment) => comment.product, {
+    cascade: true,
+  })
   comments: Comment[];
 
   @DeleteDateColumn()

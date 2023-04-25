@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ProductService } from './.service';
-import { CreateProductDto, UpdateProductDto } from './.dto';
+import { CreateProductDto, FilterProductDto, UpdateProductDto } from './.dto';
 import { Sort } from '../enum/sort';
 
 @Controller('product')
@@ -23,6 +23,11 @@ export class ProductController {
   findAll(@Query('sort') sort: Sort) {
     return this.productService.findAll(sort);
   }
+  @Post('/filter')
+  findBy(@Body() filterProductDto: FilterProductDto) {
+    return this.productService.findByFilter(filterProductDto);
+  }
+
   @Get('/:id')
   findOne(@Param('id') id: string) {
     return this.productService.findOne(+id);

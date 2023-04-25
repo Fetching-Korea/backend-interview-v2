@@ -11,7 +11,7 @@ export class AuthService {
   ) {}
 
   async signIn(signInDto: SignInDto) {
-    const user = await this.userService.findOne(signInDto.email);
+    const user = await this.userService.findByEmail(signInDto.email);
     if (signInDto.password !== user.password) {
       throw new UnauthorizedException();
     }
@@ -19,5 +19,17 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
+  }
+
+  validate(access_token: string) {
+    try {
+      return this.jwtService.verify(access_token);
+    } catch (e) {
+      throw new UnauthorizedException();
+    }
+  }
+
+  async tokenValidateUser(payload: { email: string }): Promise<any> {
+    return await this.userService.findByEmail(payload.email);
   }
 }

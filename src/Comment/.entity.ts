@@ -7,14 +7,15 @@ import {
   OneToMany,
   ManyToOne,
   CreateDateColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
 export class Comment {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 
   @Column()

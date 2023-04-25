@@ -12,6 +12,8 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Comment, (comment) => comment.user, { nullable: true })
+  @OneToMany(() => Comment, (comment) => comment.user, {
+    cascade: true,
+  })
   comments: Comment[];
 }

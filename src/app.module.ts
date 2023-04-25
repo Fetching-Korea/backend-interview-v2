@@ -7,22 +7,17 @@ import { UserModule } from './User/.module';
 import { AuthModule } from './auth/.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import { Product } from './Product/.entity';
 import { User } from './User/.entity';
 import { Comment } from './Comment/.entity';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UserModule,
     ProductModule,
     CommentModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `../.env`,
-    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => ({
@@ -41,6 +36,4 @@ import { Comment } from './Comment/.entity';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}
