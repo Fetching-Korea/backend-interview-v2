@@ -1,4 +1,5 @@
 import { Order } from "src/order/entities/order.entity";
+import { Post } from "src/post/entities/post.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -43,7 +44,11 @@ export class Product {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToMany(() => Order, order => order.product, { cascade: true })
+    @OneToMany(() => Order, order => order.product, { cascade: true , lazy: true})
     orders: Order[];
+
+    @OneToMany(() => Post, post => post.user, { cascade: true , lazy: true})
+    posts: Post[];
+
 
 }

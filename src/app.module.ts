@@ -8,6 +8,9 @@ import { ProductModule } from './product/product.module';
 import { Product } from './product/entities/product.entity';
 import { OrderModule } from './order/order.module';
 import { Order } from './order/entities/order.entity';
+import { PostModule } from './post/post.module';
+import { Post } from './post/entities/post.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,12 +21,15 @@ import { Order } from './order/entities/order.entity';
         username: 'root',
         password: 'Insanejam0220!',
         database: 'nest_shop', 
-        entities: [User, Product, Order],
+        entities: [User, Product, Order, Post],
         synchronize: true, 
+        logging: true,
       }),
       UsersModule,
       ProductModule,
       OrderModule,
+      PostModule,
+      AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

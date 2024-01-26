@@ -13,11 +13,11 @@ export class Order {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, user => user.orders)
+    @ManyToOne(() => User, user => user.orders, { lazy: true })
     @JoinColumn({name: "userId"})
     user: User;
 
-    @ManyToOne(() => Product, product => product.orders)
+    @ManyToOne(() => Product, product => product.orders, { lazy: true })
     @JoinColumn({name: "productId"})
     product: Product;
 

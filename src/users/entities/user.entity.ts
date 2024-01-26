@@ -1,4 +1,5 @@
 import { Order } from "src/order/entities/order.entity";
+import { Post } from "src/post/entities/post.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export enum Grade {
@@ -39,7 +40,10 @@ export class User {
     @CreateDateColumn()
     createdAt: Date;
 
-    @OneToMany(() => Order, order => order.user, { cascade: true })
+    @OneToMany(() => Order, order => order.user, { cascade: true , lazy: true})
     orders: Order[];
+
+    @OneToMany(() => Post, post => post.user, { cascade: true , lazy: true})
+    posts: Post[];
 
 }
