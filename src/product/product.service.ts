@@ -115,4 +115,31 @@ export class ProductService {
       product: updatedProduct,
     };
   }
+
+  async getProducts(
+    filters: { category?: string; brand?: string; name?: string } = {},
+  ): Promise<Product[]> {
+    const queryBuilder = this.productRepository.createQueryBuilder('product');
+
+    // 동적으로 필터를 추가합니다.
+    if (filters.category) {
+      queryBuilder.andWhere('product.category = :category', {
+        category: filters.category,
+      });
+    }
+    if (filters.brand) {
+      queryBuilder.andWhere('product.brand = :brand', {
+        brand: filters.brand,
+      });
+    }
+    if (filters.name) {
+      queryBuilder.andWhere('product.name LIKE :name', {
+        name: `%${filters.name}%`,
+      });
+    }
+    queryBuilder.orderBy('product.view_count', 'DESC');
+
+    const products = await queryBuilder.getMany();
+    return products;
+  }
 }

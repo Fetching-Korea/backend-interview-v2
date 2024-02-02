@@ -9,6 +9,7 @@ import {
   Delete,
   UnauthorizedException,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -64,5 +65,19 @@ export class ProductController {
     } else {
       throw new UnauthorizedException('상품 수정 권한이 없습니다.');
     }
+  }
+
+  @Get()
+  async getProducts(
+    @Query('category') category?: string,
+    @Query('brand') brand?: string,
+    @Query('name') name?: string,
+  ): Promise<Product[]> {
+    const products = await this.productService.getProducts({
+      category,
+      brand,
+      name,
+    });
+    return products;
   }
 }
