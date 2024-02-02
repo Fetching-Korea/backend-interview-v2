@@ -23,7 +23,7 @@ export class Product extends BaseEntity {
   @Column({ nullable: false })
   price: number;
 
-  @Column({ nullable: false, default: 0 })
+  @Column({ nullable: false, default: 1 })
   view_count: number;
 
   @Column()
