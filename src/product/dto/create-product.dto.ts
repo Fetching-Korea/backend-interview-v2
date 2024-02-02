@@ -1,9 +1,10 @@
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 // 옵션을 나타내는 DTO
+type Size = string | number;
 export class ProductOptionDto {
   @IsOptional()
-  size?: string;
+  size?: Size;
 
   @IsOptional()
   color?: string;

@@ -5,6 +5,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 type Size = string | number;
@@ -36,7 +38,13 @@ export class Product extends BaseEntity {
   category: string;
 
   @Column({ type: 'json', nullable: true })
-  options: { size: Size; color: string; store: number }[];
+  options: { size?: Size; color?: string; store?: number }[];
+
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @ManyToOne((type) => User, (user) => user.products, { eager: true })

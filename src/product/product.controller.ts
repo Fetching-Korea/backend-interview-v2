@@ -8,6 +8,7 @@ import {
   Get,
   Delete,
   UnauthorizedException,
+  Patch,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -16,6 +17,7 @@ import { Product } from './product.entity';
 import { User } from '../users/user.entity'; // 경로 수정 필요
 import { CreateProductDto } from './dto/create-product.dto';
 import { UsePipes } from '@nestjs/common'; // UsePipes import 추가
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('api/product')
 export class ProductController {
@@ -48,5 +50,19 @@ export class ProductController {
       throw new UnauthorizedException('상품 삭제 권한이 없습니다.');
     }
     return this.productService.deleteProductById(id, user);
+  }
+
+  @Patch('/:id')
+  @UseGuards(AuthGuard())
+  updateProduct(
+    @Param('id') id: number,
+    @GetUser() user: User,
+    @Body() updateProductDto: UpdateProductDto,
+  ): Promise<{ message: string; product: Product }> {
+    if (user.role === 'SELLER') {
+      return this.productService.updateProduct(id, user, updateProductDto);
+    } else {
+      throw new UnauthorizedException('상품 수정 권한이 없습니다.');
+    }
   }
 }
