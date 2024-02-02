@@ -117,11 +117,16 @@ export class ProductService {
   }
 
   async getProducts(
-    filters: { category?: string; brand?: string; name?: string } = {},
+    filters: {
+      category?: string;
+      brand?: string;
+      name?: string;
+      sort?: string;
+    } = {},
   ): Promise<Product[]> {
     const queryBuilder = this.productRepository.createQueryBuilder('product');
 
-    // 동적으로 필터를 추가합니다.
+    // 동적으로 필터를 추가
     if (filters.category) {
       queryBuilder.andWhere('product.category = :category', {
         category: filters.category,
@@ -137,7 +142,12 @@ export class ProductService {
         name: `%${filters.name}%`,
       });
     }
-    queryBuilder.orderBy('product.view_count', 'DESC');
+    if (filters.sort === 'createAt') {
+      queryBuilder.orderBy('product.createdAt', 'DESC'); // 최신순으로 정렬
+    } else {
+      // sort 값이 없거나 'view_count'인 경우 기본적으로 view_count로 정렬
+      queryBuilder.orderBy('product.view_count', 'DESC');
+    }
 
     const products = await queryBuilder.getMany();
     return products;
