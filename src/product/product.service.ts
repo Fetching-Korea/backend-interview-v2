@@ -1,5 +1,6 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -27,7 +28,7 @@ export class ProductService {
     return newProduct;
   }
 
-  async getByBoardId(id: number): Promise<Product> {
+  async getProductById(id: number): Promise<Product> {
     const found = await this.productRepository.findOne({ where: { id } });
     if (!found) {
       throw new NotFoundException('존재하지 않는 상품입니다!');
@@ -39,5 +40,25 @@ export class ProductService {
     console.log(result);
 
     return found;
+  }
+
+  async deleteProductById(
+    id: number,
+    user: User,
+  ): Promise<{ message: string }> {
+    const found = await this.productRepository.findOne({ where: { id } });
+    if (!found) {
+      throw new NotFoundException('존재하지 않는 상품입니다!');
+    }
+    if (user.role === 'ADMIN' || user.email === found.provider.email) {
+      const result = await this.productRepository.delete({ id });
+      if (result.affected === 1) {
+        return { message: '상품을 성공적으로 삭제하였습니다.' };
+      } else {
+        throw new InternalServerErrorException('상품 삭제에 실패하였습니다');
+      }
+    } else {
+      throw new UnauthorizedException('상품 삭제 권한이 없습니다.');
+    }
   }
 }
