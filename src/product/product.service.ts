@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ProductRepository } from './product.repository';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './product.entity';
@@ -21,5 +25,19 @@ export class ProductService {
       user,
     );
     return newProduct;
+  }
+
+  async getByBoardId(id: number): Promise<Product> {
+    const found = await this.productRepository.findOne({ where: { id } });
+    if (!found) {
+      throw new NotFoundException('존재하지 않는 상품입니다!');
+    }
+    const result = await this.productRepository.update(
+      { id },
+      { view_count: found.view_count + 1 },
+    );
+    console.log(result);
+
+    return found;
   }
 }

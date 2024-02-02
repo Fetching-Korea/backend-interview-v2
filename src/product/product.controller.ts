@@ -4,6 +4,8 @@ import {
   ValidationPipe,
   Post,
   Body,
+  Param,
+  Get,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -13,18 +15,24 @@ import { User } from '../users/user.entity'; // 경로 수정 필요
 import { CreateProductDto } from './dto/create-product.dto';
 import { UsePipes } from '@nestjs/common'; // UsePipes import 추가
 
-@Controller('product') // 'products' -> 'product'로 수정 필요
-@UseGuards(AuthGuard())
+@Controller('api')
 export class ProductController {
-  constructor(private productService: ProductService) {} // 생성자 수정 필요
+  constructor(private productService: ProductService) {}
 
-  @Post()
+  @Post('products')
   @UsePipes(ValidationPipe)
+  @UseGuards(AuthGuard())
   async createProduct(
-    @Body() createProductDto: CreateProductDto, // @Body() Decorator 추가
+    @Body() createProductDto: CreateProductDto,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @GetUser() user: User,
   ): Promise<Product> {
     return await this.productService.createProduct(createProductDto, user);
+  }
+
+  @Get('product/:id')
+  getProductById(@Param('id') id: number): Promise<Product> {
+    console.log(id);
+    return this.productService.getByBoardId(id);
   }
 }
