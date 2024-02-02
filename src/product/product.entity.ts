@@ -1,4 +1,11 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+} from 'typeorm';
 
 type Size = string | number;
 
@@ -28,6 +35,10 @@ export class Product extends BaseEntity {
   @Column({ nullable: false })
   category: string;
 
-  @Column({ type: 'json', nullable: true }) // 옵션 정보를 JSON 형태로 저장
-  options: { size: Size; color: string; store: number }[]; // JSON 형태의 옵션 배열
+  @Column({ type: 'json', nullable: true })
+  options: { size: Size; color: string; store: number }[];
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @ManyToOne((type) => User, (user) => user.products, { eager: true })
+  provider: User;
 }

@@ -2,11 +2,13 @@ import {
   BaseEntity,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { UserGender } from './user-gender.enum';
 import { UserRole } from './user-role.enum';
+import { Product } from 'src/product/product.entity';
 
 @Entity()
 @Unique(['email', 'nickname'])
@@ -31,4 +33,10 @@ export class User extends BaseEntity {
 
   @Column({ nullable: false, default: 'CUSTOMER' })
   role: UserRole;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @OneToMany((type) => Product, (product) => product.provider, {
+    nullable: true,
+  })
+  products: Product[];
 }

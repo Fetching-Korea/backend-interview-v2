@@ -10,7 +10,8 @@ export class ProductRepository extends Repository<Product> {
     createProductDto: CreateProductDto,
     user: User,
   ): Promise<Product> {
-    const { name, description, brand, price, options, category } = createProductDto;
+    const { name, description, brand, price, options, category } =
+      createProductDto;
 
     const totalStore = this.calculateTotalStore(options);
 
@@ -22,6 +23,7 @@ export class ProductRepository extends Repository<Product> {
       options,
       category,
       total_store: totalStore,
+      provider: user,
     });
 
     // 제품을 저장합니다.
