@@ -6,6 +6,8 @@ import {
   Body,
   Param,
   Get,
+  Delete,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -15,11 +17,11 @@ import { User } from '../users/user.entity'; // 경로 수정 필요
 import { CreateProductDto } from './dto/create-product.dto';
 import { UsePipes } from '@nestjs/common'; // UsePipes import 추가
 
-@Controller('api')
+@Controller('api/product')
 export class ProductController {
   constructor(private productService: ProductService) {}
 
-  @Post('products')
+  @Post()
   @UsePipes(ValidationPipe)
   @UseGuards(AuthGuard())
   async createProduct(
@@ -30,9 +32,21 @@ export class ProductController {
     return await this.productService.createProduct(createProductDto, user);
   }
 
-  @Get('product/:id')
+  @Get('/:id')
   getProductById(@Param('id') id: number): Promise<Product> {
     console.log(id);
-    return this.productService.getByBoardId(id);
+    return this.productService.getProductById(id);
+  }
+
+  @Delete('/:id')
+  @UseGuards(AuthGuard())
+  deleteProductById(
+    @Param('id') id: number,
+    @GetUser() user: User,
+  ): Promise<{ message: string }> {
+    if (user.role === 'CUSTOMER') {
+      throw new UnauthorizedException('상품 삭제 권한이 없습니다.');
+    }
+    return this.productService.deleteProductById(id, user);
   }
 }
