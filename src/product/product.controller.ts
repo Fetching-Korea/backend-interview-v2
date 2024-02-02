@@ -1,4 +1,14 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards, ValidationPipe } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ProductService } from './product.service';
 
 @Controller('product')
-export class ProductController {}
+@UseGuards(AuthGuard())
+export class ProductController {
+  constructor(private productService: ProductService) {}
+//   @Post()
+//   @UsePipes(ValidationPipe)
+//   createProduct(
+//     @Body() createProductDto: 
+//   )
+}
