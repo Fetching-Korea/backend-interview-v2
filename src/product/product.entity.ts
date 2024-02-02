@@ -1,20 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  BaseEntity,
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
-import { ProductCategory } from './product-category.entity';
-import { ProductBrand } from './product-brand.entity';
-import { ProductOption } from './product-option.entity';
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+
+type Size = string | number;
 
 @Entity()
 export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ nullable: false })
+  name: string;
 
   @Column({ nullable: false })
   description: string;
@@ -28,16 +22,12 @@ export class Product extends BaseEntity {
   @Column()
   total_store: number;
 
-  @OneToMany(() => ProductOption, (option) => option.product, { cascade: true })
-  options: ProductOption[];
+  @Column({ nullable: false })
+  brand: string;
 
-  @ManyToOne((type) => ProductBrand, (productBrand) => productBrand.products, {
-    eager: true,
-  })
-  brand: ProductBrand;
+  @Column({ nullable: false })
+  category: string;
 
-  @ManyToOne(() => ProductCategory, (category) => category.products, {
-    nullable: true,
-  })
-  category: ProductCategory;
+  @Column({ type: 'json', nullable: true }) // 옵션 정보를 JSON 형태로 저장
+  options: { size: Size; color: string; store: number }[]; // JSON 형태의 옵션 배열
 }

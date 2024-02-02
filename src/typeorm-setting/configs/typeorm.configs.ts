@@ -2,10 +2,6 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
 import * as config from 'config';
 import { Product } from 'src/product/product.entity';
-import { ProductCategory } from 'src/product/product-category.entity';
-import { ProductBrand } from 'src/product/product-brand.entity';
-import { ProductOption } from 'src/product/product-option.entity';
-
 const dbConfig = config.get('db');
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
@@ -14,13 +10,6 @@ export const typeORMConfig: TypeOrmModuleOptions = {
   username: process.env.RDS_USERNAME || dbConfig.username,
   password: process.env.RDS_PASSWORD || dbConfig.password,
   database: process.env.RDS_DB_NAME || dbConfig.database,
-  entities: [
-    __dirname + '/../**/*.entity.{js,ts}',
-    User,
-    Product,
-    ProductCategory,
-    ProductBrand,
-    ProductOption,
-  ],
+  entities: [__dirname + '/../**/*.entity.{js,ts}', User, Product],
   synchronize: true,
 };
