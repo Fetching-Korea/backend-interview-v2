@@ -7,13 +7,13 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { Review } from './review.entity';
 import { User } from 'src/users/user.entity';
 import { ReviewRepository } from './review.repository';
-import { ProductService } from 'src/product/product.service'; // ProductService 추가
+import { ProductService } from 'src/product/product.service';
 
 @Injectable()
 export class ReviewService {
   constructor(
     private reviewRepository: ReviewRepository,
-    private productService: ProductService, // ProductService 주입
+    private productService: ProductService,
   ) {}
 
   async createReview(
