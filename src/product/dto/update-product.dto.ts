@@ -1,4 +1,5 @@
 import { IsOptional } from 'class-validator';
+
 type Size = string | number;
 
 export class UpdateProductOptionDto {
@@ -18,7 +19,4 @@ export class UpdateProductDto {
 
   @IsOptional()
   price?: number;
-
-  @IsOptional()
-  options?: UpdateProductOptionDto[];
 }
