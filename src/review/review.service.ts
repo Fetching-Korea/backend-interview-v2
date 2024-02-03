@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -126,5 +127,34 @@ export class ReviewService {
       message: '리뷰가 성공적으로 수정되었습니다.',
       review: reviewWithNicknameOnly,
     };
+  }
+
+  async deleteReview(id: number, user: User): Promise<{ message: string }> {
+    const found = await this.reviewRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['user'],
+    });
+
+    if (!found) {
+      throw new BadRequestException('존재하지 않는 리뷰입니다.');
+    }
+
+    if (found.user.id !== user.id && user.role !== 'ADMIN') {
+      throw new UnauthorizedException('리뷰 삭제 권한이 없습니다.');
+    }
+
+    const result = await this.reviewRepository.delete({
+      id,
+    });
+
+    if (result.affected === 1) {
+      return { message: '리뷰가 성공적으로 삭제되었습니다.' };
+    } else {
+      throw new InternalServerErrorException(
+        '리뷰 삭제 중 오류가 발생하였습니다.',
+      );
+    }
   }
 }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -48,6 +49,7 @@ export class ReviewController {
       return this.reviewService.getReviewsByProduct(productId);
     }
   }
+
   @Patch('/:id')
   @UseGuards(AuthGuard())
   updateReview(
@@ -65,5 +67,14 @@ export class ReviewController {
     };
   }> {
     return this.reviewService.updateReview(id, user, updateReviewDto);
+  }
+
+  @Delete('/:id')
+  @UseGuards(AuthGuard())
+  deleteReview(
+    @Param('id') id: number,
+    @GetUser() user: User,
+  ): Promise<{ message: string }> {
+    return this.reviewService.deleteReview(id, user);
   }
 }
