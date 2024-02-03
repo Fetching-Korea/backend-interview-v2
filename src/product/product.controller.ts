@@ -72,11 +72,17 @@ export class ProductController {
     @Query('category') category?: string,
     @Query('brand') brand?: string,
     @Query('name') name?: string,
+    @Query('sort') sort?: string,
+    @Query('min_price') min_price?: number,
+    @Query('max_price') max_price?: number,
   ): Promise<Product[]> {
     const products = await this.productService.getProducts({
       category,
       brand,
       name,
+      sort,
+      min_price,
+      max_price,
     });
     return products;
   }

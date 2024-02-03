@@ -122,6 +122,8 @@ export class ProductService {
       brand?: string;
       name?: string;
       sort?: string;
+      min_price?: number;
+      max_price?: number;
     } = {},
   ): Promise<Product[]> {
     const queryBuilder = this.productRepository.createQueryBuilder('product');
@@ -142,8 +144,19 @@ export class ProductService {
         name: `%${filters.name}%`,
       });
     }
+    if (filters.min_price) {
+      queryBuilder.andWhere('product.price >= :min_price', {
+        min_price: filters.min_price,
+      });
+    }
+    if (filters.max_price) {
+      queryBuilder.andWhere('product.price <= :max_price', {
+        max_price: filters.max_price,
+      });
+    }
+
     if (filters.sort === 'createAt') {
-      queryBuilder.orderBy('product.createdAt', 'DESC'); // 최신순으로 정렬
+      queryBuilder.orderBy('product.created_at', 'DESC'); // 최신순으로 정렬
     } else {
       // sort 값이 없거나 'view_count'인 경우 기본적으로 view_count로 정렬
       queryBuilder.orderBy('product.view_count', 'DESC');

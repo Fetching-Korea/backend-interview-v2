@@ -1,3 +1,4 @@
+import { Review } from 'src/review/review.entity';
 import { User } from 'src/users/user.entity';
 import {
   BaseEntity,
@@ -7,6 +8,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 type Size = string | number;
@@ -41,12 +43,15 @@ export class Product extends BaseEntity {
   options: { size?: Size; color?: string; store?: number }[];
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Date;
+  updated_at: Date;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   @ManyToOne((type) => User, (user) => user.products, { eager: true })
   provider: User;
+
+  @OneToMany(() => Review, (review) => review.product, { eager: true })
+  reviews: Review[];
 }
