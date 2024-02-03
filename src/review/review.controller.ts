@@ -31,7 +31,7 @@ export class ReviewController {
     return this.reviewService.createReview(productId, createReviewDto, user);
   }
 
-  @Get('/:id')
+  @Get()
   getReviewsByProduct(@Query('productId') productId: number): Promise<
     {
       id: number;
