@@ -7,14 +7,19 @@ import { ReviewRepository } from './review.repository';
 import { ProductModule } from 'src/product/product.module';
 import { ProductRepository } from 'src/product/product.repository';
 import { ProductService } from 'src/product/product.service';
+import { ProductOptionRepository } from 'src/product-option/product-option.repository';
 
 @Module({
   imports: [
     UsersModule,
     ProductModule,
-    TypeOrmExModule.forCustomRepository([ReviewRepository, ProductRepository]),
+    TypeOrmExModule.forCustomRepository([
+      ReviewRepository,
+      ProductRepository,
+      ProductOptionRepository,
+    ]),
   ],
   controllers: [ReviewController],
-  providers: [ReviewService, ProductService],
+  providers: [ReviewService, ProductService, ProductRepository],
 })
 export class ReviewModule {}

@@ -1,17 +1,16 @@
-import { Review } from 'src/review/review.entity';
-import { User } from 'src/users/user.entity';
 import {
-  BaseEntity,
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  BaseEntity,
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-
-type Size = string | number;
+import { User } from 'src/users/user.entity';
+import { Review } from 'src/review/review.entity';
+import { ProductOption } from 'src/product-option/product-option.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -39,8 +38,8 @@ export class Product extends BaseEntity {
   @Column({ nullable: false })
   category: string;
 
-  @Column({ type: 'json', nullable: true })
-  options: { size?: Size; color?: string; store?: number }[];
+  @OneToMany(() => ProductOption, (productOption) => productOption.product) // ProductOption과의 일대다 관계 설정
+  options: ProductOption[];
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
@@ -48,8 +47,7 @@ export class Product extends BaseEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  @ManyToOne((type) => User, (user) => user.products, { eager: true })
+  @ManyToOne(() => User, (user) => user.products, { eager: true })
   provider: User;
 
   @OneToMany(() => Review, (review) => review.product, { eager: true })

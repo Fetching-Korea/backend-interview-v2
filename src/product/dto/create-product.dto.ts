@@ -1,7 +1,14 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  ValidateNested,
+  ArrayMinSize,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 // 옵션을 나타내는 DTO
 type Size = string | number;
+
 export class ProductOptionDto {
   @IsOptional()
   size?: Size;
@@ -24,7 +31,10 @@ export class CreateProductDto {
   @IsNotEmpty()
   price: number;
 
-  @IsNotEmpty()
+  @IsOptional()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => ProductOptionDto)
   options?: ProductOptionDto[];
 
   @IsNotEmpty()

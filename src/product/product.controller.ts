@@ -16,9 +16,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../users/get-user.decorator'; // 경로 수정 필요
 import { Product } from './product.entity';
 import { User } from '../users/user.entity'; // 경로 수정 필요
-import { CreateProductDto } from './dto/create-product.dto';
+import { CreateProductDto, ProductOptionDto } from './dto/create-product.dto';
 import { UsePipes } from '@nestjs/common'; // UsePipes import 추가
-import { UpdateProductDto } from './dto/update-product.dto';
+import {
+  UpdateProductDto,
+  UpdateProductOptionDto,
+} from './dto/update-product.dto';
+import { ProductOption } from 'src/product-option/product-option.entity';
 
 @Controller('api/product')
 export class ProductController {
@@ -29,10 +33,18 @@ export class ProductController {
   @UseGuards(AuthGuard())
   async createProduct(
     @Body() createProductDto: CreateProductDto,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Body('options') productOptionsDto: ProductOptionDto[],
     @GetUser() user: User,
-  ): Promise<Product> {
-    return await this.productService.createProduct(createProductDto, user);
+  ): Promise<{
+    message: string;
+    product: Product;
+    options: Partial<ProductOption>[];
+  }> {
+    return await this.productService.createProduct(
+      createProductDto,
+      productOptionsDto,
+      user,
+    );
   }
 
   @Get('/:id')
@@ -62,6 +74,24 @@ export class ProductController {
   ): Promise<{ message: string; product: Product }> {
     if (user.role === 'SELLER') {
       return this.productService.updateProduct(id, user, updateProductDto);
+    } else {
+      throw new UnauthorizedException('상품 수정 권한이 없습니다.');
+    }
+  }
+
+  @Patch('/:id/option')
+  @UseGuards(AuthGuard())
+  updateProductOption(
+    @Param('id') id: number,
+    @GetUser() user: User,
+    @Body() updateProductOptionDto: UpdateProductOptionDto[],
+  ) {
+    if (user.role === 'SELLER') {
+      return this.productService.updateProductOption(
+        id,
+        user,
+        updateProductOptionDto,
+      );
     } else {
       throw new UnauthorizedException('상품 수정 권한이 없습니다.');
     }

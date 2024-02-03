@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ProductModule } from './product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -9,10 +7,18 @@ import { LikeModule } from './like/like.module';
 import { OrderModule } from './order/order.module';
 import { CartModule } from './cart/cart.module';
 import { ReviewModule } from './review/review.module';
+import { ProductOptionModule } from './product-option/product-option.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeORMConfig), UsersModule, ProductModule, LikeModule, OrderModule, CartModule, ReviewModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    TypeOrmModule.forRoot(typeORMConfig),
+    UsersModule,
+    ProductModule,
+    LikeModule,
+    OrderModule,
+    CartModule,
+    ReviewModule,
+    ProductOptionModule,
+  ],
 })
 export class AppModule {}
