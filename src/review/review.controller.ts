@@ -16,7 +16,6 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { User } from 'src/users/user.entity';
 import { Review } from './review.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { Product } from 'src/product/product.entity';
 import { GetUser } from 'src/users/get-user.decorator';
 import { UpdateReviewDto } from './dto/update-review.dto';
 
@@ -28,11 +27,16 @@ export class ReviewController {
   @UsePipes(ValidationPipe)
   @UseGuards(AuthGuard())
   async createReview(
-    @Query('productId') productId: Product['id'],
+    @Query('productId') productId: number,
     @Body() createReviewDto: CreateReviewDto,
     @GetUser() user: User,
   ): Promise<{ message: string; review: Review }> {
-    return this.reviewService.createReview(productId, createReviewDto, user);
+    console.log(Number(productId));
+    return this.reviewService.createReview(
+      Number(productId),
+      createReviewDto,
+      user,
+    );
   }
 
   @Get()

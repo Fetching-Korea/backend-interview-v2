@@ -10,13 +10,13 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { Review } from './review.entity';
 import { User } from 'src/users/user.entity';
 import { ReviewRepository } from './review.repository';
-import { ProductService } from 'src/product/product.service';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { ProductRepository } from '../product/product.repository';
 @Injectable()
 export class ReviewService {
   constructor(
     private reviewRepository: ReviewRepository,
-    private productService: ProductService,
+    private productRepository: ProductRepository,
   ) {}
 
   async createReview(
@@ -25,11 +25,12 @@ export class ReviewService {
     user: User,
   ): Promise<{ message: string; review: Review }> {
     // 해당 상품이 존재하는지 확인
-    const product = await this.productService.getProductById(productId);
-    if (!product) {
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+    });
+    if (product === undefined) {
       throw new BadRequestException('존재하지 않는 상품입니다.');
     }
-    console.log(product);
     // 해당 상품을 등록한 유저인지 확인
     if (product.provider.id === user.id) {
       throw new BadRequestException(
