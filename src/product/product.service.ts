@@ -9,6 +9,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './product.entity';
 import { User } from 'src/users/user.entity';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { SelectQueryBuilder } from 'typeorm';
 
 @Injectable()
 export class ProductService {
@@ -163,6 +164,8 @@ export class ProductService {
         .addSelect('COUNT(review.id)', 'review_count')
         .groupBy('product.id')
         .orderBy('review_count', 'DESC'); // 리뷰 많은 순으로 정렬
+    } else if (filters.sort === 'goodReview') {
+      await orderByGoodReview(queryBuilder); // 좋은 리뷰 기준으로 정렬
     } else {
       // sort 값이 없거나 'view_count'인 경우 default로 view_count로 정렬
       queryBuilder.orderBy('product.view_count', 'DESC');
@@ -171,4 +174,19 @@ export class ProductService {
     const products = await queryBuilder.getMany();
     return products;
   }
+}
+async function orderByGoodReview(
+  queryBuilder: SelectQueryBuilder<any>,
+): Promise<any> {
+  const products = await queryBuilder
+    .leftJoin('product.reviews', 'review')
+    .addSelect(
+      'COALESCE(AVG(CASE WHEN review.id IS NOT NULL THEN review.satisfaction_level ELSE 0 END), 0)',
+      'avg_satisfaction_level',
+    )
+    .groupBy('product.id')
+    .orderBy('avg_satisfaction_level', 'DESC')
+    .getMany();
+
+  return products;
 }
