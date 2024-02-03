@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Query,
   UseGuards,
@@ -28,5 +29,20 @@ export class ReviewController {
     @GetUser() user: User,
   ): Promise<{ message: string; review: Review }> {
     return this.reviewService.createReview(productId, createReviewDto, user);
+  }
+
+  @Get()
+  getReviewsByProduct(@Query('productId') productId: number): Promise<
+    {
+      id: number;
+      title: string;
+      content: string;
+      satisfaction_level: number;
+      user: { nickname: string };
+    }[]
+  > {
+    {
+      return this.reviewService.getReviewsByProduct(productId);
+    }
   }
 }
