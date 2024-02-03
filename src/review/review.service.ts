@@ -2,12 +2,15 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { Review } from './review.entity';
 import { User } from 'src/users/user.entity';
 import { ReviewRepository } from './review.repository';
 import { ProductService } from 'src/product/product.service';
+import { UpdateReviewDto } from './dto/update-review.dto';
 @Injectable()
 export class ReviewService {
   constructor(
@@ -73,5 +76,55 @@ export class ReviewService {
 
     console.log(reviewsWithNicknameOnly);
     return reviewsWithNicknameOnly;
+  }
+
+  async updateReview(
+    id: number,
+    user: User,
+    updateReviewDto: UpdateReviewDto,
+  ): Promise<{
+    message: string;
+    review: {
+      id: number;
+      title: string;
+      content: string;
+      satisfaction_level: number;
+      user: { nickname: string };
+    };
+  }> {
+    const found = await this.reviewRepository.findOne({ where: { id } });
+
+    if (!found) {
+      throw new NotFoundException('존재하지 않는 리뷰입니다.');
+    }
+    if (found.user.id !== user.id) {
+      throw new UnauthorizedException('리뷰 수정 권한이 없습니다!');
+    }
+    const { title, content, satisfaction_level } = updateReviewDto;
+    if (title !== undefined) {
+      found.title = title;
+    }
+    if (content !== undefined) {
+      found.content = content;
+    }
+    if (satisfaction_level !== undefined) {
+      found.satisfaction_level = satisfaction_level;
+    }
+
+    const updatedReview = await this.reviewRepository.save(found);
+
+    // 사용자의 닉네임만 가져와서 새로운 객체로 매핑합니다.
+    const reviewWithNicknameOnly = {
+      id: updatedReview.id,
+      title: updatedReview.title,
+      content: updatedReview.content,
+      satisfaction_level: updatedReview.satisfaction_level,
+      user: { nickname: updatedReview.user.nickname },
+    };
+
+    return {
+      message: '리뷰가 성공적으로 수정되었습니다.',
+      review: reviewWithNicknameOnly,
+    };
   }
 }
