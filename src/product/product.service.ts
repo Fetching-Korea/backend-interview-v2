@@ -157,8 +157,14 @@ export class ProductService {
 
     if (filters.sort === 'createAt') {
       queryBuilder.orderBy('product.created_at', 'DESC'); // 최신순으로 정렬
+    } else if (filters.sort === 'reviews') {
+      queryBuilder
+        .leftJoin('product.reviews', 'review')
+        .addSelect('COUNT(review.id)', 'review_count')
+        .groupBy('product.id')
+        .orderBy('review_count', 'DESC'); // 리뷰 많은 순으로 정렬
     } else {
-      // sort 값이 없거나 'view_count'인 경우 기본적으로 view_count로 정렬
+      // sort 값이 없거나 'view_count'인 경우 default로 view_count로 정렬
       queryBuilder.orderBy('product.view_count', 'DESC');
     }
 
