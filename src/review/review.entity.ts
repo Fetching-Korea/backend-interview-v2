@@ -23,7 +23,7 @@ export class Review {
   @Column({ type: 'int', nullable: false })
   satisfaction_level: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.reviews, { eager: true })
   user: User;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

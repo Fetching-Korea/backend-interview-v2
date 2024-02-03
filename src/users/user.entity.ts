@@ -41,6 +41,6 @@ export class User extends BaseEntity {
   })
   products: Product[];
 
-  @OneToMany(() => Review, (review) => review.user, { eager: true })
+  @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
 }

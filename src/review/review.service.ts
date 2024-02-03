@@ -8,7 +8,6 @@ import { Review } from './review.entity';
 import { User } from 'src/users/user.entity';
 import { ReviewRepository } from './review.repository';
 import { ProductService } from 'src/product/product.service';
-
 @Injectable()
 export class ReviewService {
   constructor(
@@ -48,5 +47,31 @@ export class ReviewService {
 
     const result = await this.reviewRepository.save(newReview);
     return { message: '리뷰가 성공적으로 등록되었습니다!', review: result };
+  }
+
+  async getReviewsByProduct(productId: number): Promise<
+    {
+      id: number;
+      title: string;
+      content: string;
+      satisfaction_level: number;
+      user: { nickname: string };
+    }[]
+  > {
+    const reviews = await this.reviewRepository.find({
+      where: {
+        product: { id: productId },
+      },
+      relations: ['user'],
+    });
+
+    // User 엔티티에서 nickname만 추출하여 새로운 객체로 매핑합니다.
+    const reviewsWithNicknameOnly = reviews.map((review) => ({
+      ...review,
+      user: { nickname: review.user.nickname },
+    }));
+
+    console.log(reviewsWithNicknameOnly);
+    return reviewsWithNicknameOnly;
   }
 }
