@@ -9,6 +9,7 @@ import {
 import { UserGender } from './user-gender.enum';
 import { UserRole } from './user-role.enum';
 import { Product } from 'src/product/product.entity';
+import { Review } from 'src/review/review.entity';
 
 @Entity()
 @Unique(['email', 'nickname'])
@@ -39,4 +40,7 @@ export class User extends BaseEntity {
     nullable: true,
   })
   products: Product[];
+
+  @OneToMany(() => Review, (review) => review.user, { eager: true })
+  reviews: Review[];
 }
