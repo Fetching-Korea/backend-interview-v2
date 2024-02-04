@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import * as config from 'config';
 import { JWTStrategy } from './jwt.strategy';
+import { CartRepository } from 'src/cart/cart.repository';
 
 const jwtConfig = config.get('jwt');
 @Module({
@@ -18,7 +19,7 @@ const jwtConfig = config.get('jwt');
         expiresIn: jwtConfig.expiresIn,
       },
     }),
-    TypeOrmExModule.forCustomRepository([UserRepository]),
+    TypeOrmExModule.forCustomRepository([UserRepository, CartRepository]),
   ],
   providers: [UsersService, JWTStrategy],
   controllers: [UsersController],

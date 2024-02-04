@@ -2,7 +2,9 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
@@ -11,6 +13,7 @@ import { UserRole } from './user-role.enum';
 import { Product } from 'src/product/product.entity';
 import { Review } from 'src/review/review.entity';
 import { Like } from 'src/like/like.entity';
+import { Cart } from 'src/cart/cart.entity';
 
 @Entity()
 @Unique(['email', 'nickname'])
@@ -47,4 +50,8 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
+
+  @OneToOne(() => Cart, (cart) => cart.user, { eager: true })
+  @JoinColumn({ name: 'cartId' })
+  cart: Cart;
 }

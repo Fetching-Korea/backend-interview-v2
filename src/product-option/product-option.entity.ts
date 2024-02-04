@@ -4,8 +4,10 @@ import {
   Column,
   BaseEntity,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Product } from 'src/product/product.entity';
+import { CartItem } from 'src/cart-item/cart-item.entity';
 
 @Entity()
 export class ProductOption extends BaseEntity {
@@ -23,4 +25,7 @@ export class ProductOption extends BaseEntity {
 
   @ManyToOne(() => Product, (product) => product.options) // Product와의 다대일 관계 설정
   product: Product;
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.productOption)
+  cartItems: CartItem[];
 }

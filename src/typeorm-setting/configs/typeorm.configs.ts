@@ -5,6 +5,8 @@ import { Product } from 'src/product/product.entity';
 import { Review } from 'src/review/review.entity';
 import { ProductOption } from 'src/product-option/product-option.entity';
 import { Like } from 'src/like/like.entity';
+import { CartItem } from 'src/cart-item/cart-item.entity';
+import { Cart } from 'src/cart/cart.entity';
 const dbConfig = config.get('db');
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
@@ -20,6 +22,8 @@ export const typeORMConfig: TypeOrmModuleOptions = {
     ProductOption,
     Review,
     Like,
+    CartItem,
+    Cart,
   ],
   synchronize: true,
 };

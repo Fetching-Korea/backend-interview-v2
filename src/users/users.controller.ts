@@ -29,7 +29,6 @@ export class UsersController {
     @Body() authSignInDto: AuthSignInDto,
   ): Promise<{ accessToken: string; userInfo: object }> {
     const result = await this.usersService.signIn(authSignInDto);
-    console.log('signin_controller::', result);
     return result;
   }
 }

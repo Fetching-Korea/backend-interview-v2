@@ -12,6 +12,7 @@ import { User } from 'src/users/user.entity';
 import { Review } from 'src/review/review.entity';
 import { ProductOption } from 'src/product-option/product-option.entity';
 import { Like } from 'src/like/like.entity';
+import { CartItem } from 'src/cart-item/cart-item.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -56,4 +57,7 @@ export class Product extends BaseEntity {
 
   @OneToMany(() => Like, (like) => like.product, { eager: true })
   likes: Like[];
+
+  @OneToMany(() => CartItem, (cartItem) => cartItem.product, { eager: true })
+  cartItems: CartItem[];
 }
