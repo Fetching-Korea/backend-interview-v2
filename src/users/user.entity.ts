@@ -10,6 +10,7 @@ import { UserGender } from './user-gender.enum';
 import { UserRole } from './user-role.enum';
 import { Product } from 'src/product/product.entity';
 import { Review } from 'src/review/review.entity';
+import { Like } from 'src/like/like.entity';
 
 @Entity()
 @Unique(['email', 'nickname'])
@@ -43,4 +44,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 }
