@@ -8,6 +8,7 @@ import { ReviewRepository } from 'src/review/review.repository';
 import { ProductRepository } from 'src/product/product.repository';
 import { ProductOptionRepository } from 'src/product-option/product-option.repository';
 import { TypeOrmExModule } from 'src/typeorm-setting/typeorm-ex.module';
+import { LikeRepository } from './like.repository';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { TypeOrmExModule } from 'src/typeorm-setting/typeorm-ex.module';
       ReviewRepository,
       ProductRepository,
       ProductOptionRepository,
+      LikeRepository,
     ]),
   ],
   controllers: [LikeController],
