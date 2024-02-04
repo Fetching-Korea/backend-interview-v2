@@ -79,7 +79,7 @@ export class ProductController {
     }
   }
 
-  @Patch('/:id/option')
+  @Patch('/:productId/option')
   @UseGuards(AuthGuard())
   updateProductOption(
     @Param('id') id: number,
@@ -93,7 +93,7 @@ export class ProductController {
         updateProductOptionDto,
       );
     } else {
-      throw new UnauthorizedException('상품 수정 권한이 없습니다.');
+      throw new UnauthorizedException('옵션 수정 권한이 없습니다.');
     }
   }
 

@@ -11,6 +11,7 @@ import {
 import { User } from 'src/users/user.entity';
 import { Review } from 'src/review/review.entity';
 import { ProductOption } from 'src/product-option/product-option.entity';
+import { Like } from 'src/like/like.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -52,4 +53,7 @@ export class Product extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.product, { eager: true })
   reviews: Review[];
+
+  @OneToMany(() => Like, (like) => like.product, { eager: true })
+  likes: Like[];
 }
