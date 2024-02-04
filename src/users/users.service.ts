@@ -17,10 +17,14 @@ export class UsersService {
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<User> {
     const newUser = await this.userRepository.createUser(authCredentialsDto);
     if (newUser) {
-      const newCart = await this.cartRepository.create({
+      const newCart = this.cartRepository.create({
         user: { id: newUser.id },
       });
-      console.log(newCart);
+      const savedCart = await this.cartRepository.save(newCart);
+      console.log(savedCart);
+      await this.userRepository.update(newUser.id, {
+        cart: { id: savedCart.id },
+      });
     }
     return newUser;
   }

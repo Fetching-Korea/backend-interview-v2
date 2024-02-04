@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -51,5 +52,6 @@ export class User extends BaseEntity {
   likes: Like[];
 
   @OneToOne(() => Cart, (cart) => cart.user, { eager: true })
+  @JoinColumn({ name: 'cartId' })
   cart: Cart;
 }
