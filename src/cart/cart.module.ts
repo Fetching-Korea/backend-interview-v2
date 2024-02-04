@@ -3,10 +3,10 @@ import { CartService } from './cart.service';
 import { CartController } from './cart.controller';
 import { TypeOrmExModule } from 'src/typeorm-setting/typeorm-ex.module';
 import { ProductOptionModule } from 'src/product-option/product-option.module';
-import { ProductModule } from 'src/product/product.module';
-import { UsersModule } from 'src/users/users.module';
 import { CartRepository } from './cart.repository';
 import { CartItemRepository } from 'src/cart-item/cart-item.repository';
+import { ProductModule } from 'src/product/product.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [

@@ -4,15 +4,25 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthCredentialsDto } from './dto/auth-credential.dto';
 import * as bcrypt from 'bcryptjs';
 import { AuthSignInDto } from './dto/auth-signin.dto';
+import { CartRepository } from 'src/cart/cart.repository';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     private userRepository: UserRepository,
     private jwtService: JwtService,
+    private cartRepository: CartRepository,
   ) {}
-  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return await this.userRepository.createUser(authCredentialsDto);
+  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+    const newUser = await this.userRepository.createUser(authCredentialsDto);
+    if (newUser) {
+      const newCart = await this.cartRepository.create({
+        user: { id: newUser.id },
+      });
+      console.log(newCart);
+    }
+    return newUser;
   }
 
   async signIn(

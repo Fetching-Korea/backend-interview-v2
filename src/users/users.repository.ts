@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 @CustomRepository(User)
 export class UserRepository extends Repository<User> {
-  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<User> {
     const { nickname, email, password, address, gender, role } =
       authCredentialsDto;
     const salt = await bcrypt.genSalt();
@@ -24,7 +24,7 @@ export class UserRepository extends Repository<User> {
     });
     console.log(newUser);
     try {
-      await this.save(newUser);
+      return await this.save(newUser);
     } catch (err) {
       console.log(err);
       if (err.code === '23505') {
