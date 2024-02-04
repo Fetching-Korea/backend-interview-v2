@@ -1,4 +1,11 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CartItemService } from './cart-item.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/users/user.entity';
@@ -23,5 +30,10 @@ export class CartItemController {
       quantity,
       user,
     );
+  }
+  @Delete('/:id')
+  @UseGuards(AuthGuard())
+  deleteCartItem(@Param('id') cartItemId: number, @GetUser() user: User) {
+    return this.cartItemService.deleteCartItemById(user, cartItemId);
   }
 }

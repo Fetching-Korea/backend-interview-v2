@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { User } from 'src/users/user.entity';
 import { ProductOptionRepository } from 'src/product-option/product-option.repository';
@@ -66,6 +67,26 @@ export class CartItemService {
           '장바구니 수량 업데이트 중 오류 발생!',
         );
       }
+    }
+  }
+
+  async deleteCartItemById(user: User, cartItemId: number) {
+    const cartItem = await this.cartItemRepository.findOne({
+      where: {
+        id: cartItemId,
+        cart: { id: user.cart.id },
+      },
+    });
+
+    // CartItem이 존재하지 않거나, 현재 사용자의 Cart에 속하지 않는 경우 에러 처리
+    if (!cartItem) {
+      throw new NotFoundException('찾을 수 없는 장바구니 아이템입니다!');
+    }
+    try {
+      await this.cartItemRepository.delete(cartItem.id);
+      return { message: '장바구니에 담긴 상품이 성공적으로 삭제되었습니다.' };
+    } catch (err) {
+      throw new InternalServerErrorException(err);
     }
   }
 }
