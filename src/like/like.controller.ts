@@ -3,14 +3,9 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   Param,
-  Patch,
   Post,
-  Query,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/users/user.entity';
@@ -28,5 +23,13 @@ export class LikeController {
   ) {
     console.log(productId, user);
     return this.likeService.createLike(user, productId);
+  }
+  @Delete('/:id')
+  @UseGuards(AuthGuard())
+  async deleteLike(
+    @Param('id') id: number,
+    @GetUser() user: User,
+  ): Promise<{ message: string }> {
+    return this.likeService.deleteLike(user, id);
   }
 }
