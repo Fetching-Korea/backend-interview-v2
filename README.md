@@ -1,5 +1,8 @@
 # 백엔드 채용 과제
 
+## API 명세서 및 DB ERD 문서
+https://seeun0210.notion.site/seeun0210/Fetching-86de6a2e4cce412ba4711d09703a329c
+
 ## 주제
 
 - Nest.JS를 사용해 간단한 쇼핑몰 서버를 구현해주세요!
