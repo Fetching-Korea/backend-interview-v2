@@ -3,8 +3,6 @@ import { MypageService } from './mypage.service';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/users/user.entity';
 import { GetUser } from 'src/users/get-user.decorator';
-import { Review } from 'src/review/review.entity';
-
 @Controller('/auth/mypage')
 @UseGuards(AuthGuard())
 export class MypageController {
@@ -17,5 +15,10 @@ export class MypageController {
   @Get('likes')
   getMyLikes(@GetUser() user: User) {
     return this.myPageService.getMyLikes(user);
+  }
+
+  @Get('cart')
+  getMyCart(@GetUser() user: User) {
+    return this.myPageService.getMyCart(user);
   }
 }

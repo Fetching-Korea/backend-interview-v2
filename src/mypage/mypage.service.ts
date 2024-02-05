@@ -10,6 +10,9 @@ export class MypageService {
       where: { id: user.id },
       relations: ['reviews', 'reviews.product'],
     });
+    if (!userInfo.reviews) {
+      return { message: '아직 리뷰가 없습니다!' };
+    }
     const simplifiedReviews = userInfo.reviews.map((review) => ({
       id: review.id,
       title: review.title,
@@ -34,6 +37,9 @@ export class MypageService {
       where: { id: user.id },
       relations: ['likes', 'likes.product'],
     });
+    if (!userInfo.likes) {
+      return { message: '찜한 상품이 없습니다' };
+    }
     const result = userInfo.likes.map((like) => ({
       id: like.id,
       product: {
@@ -44,6 +50,33 @@ export class MypageService {
         total_store: like.product.total_store,
         brand: like.product.brand,
         category: like.product.category,
+      },
+    }));
+    return result;
+  }
+
+  async getMyCart(user: User) {
+    const userInfo = await this.userRepository.findOne({
+      where: { id: user.id },
+      relations: [
+        'cart',
+        'cart.cartItems',
+        'cart.cartItems.productOption',
+        'cart.cartItems.product',
+      ],
+    });
+    if (!userInfo.cart.cartItems) {
+      return { message: '장바구니에 담긴 상품이 없습니다' };
+    }
+    const result = userInfo.cart.cartItems.map((items) => ({
+      id: items.id,
+      quantity: items.quantity,
+      productOption: items.productOption,
+      product: {
+        id: items.product.id,
+        name: items.product.name,
+        brand: items.product.brand,
+        price: items.product.price,
       },
     }));
     return result;
