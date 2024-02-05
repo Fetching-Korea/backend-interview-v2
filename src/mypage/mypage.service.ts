@@ -10,7 +10,7 @@ export class MypageService {
       where: { id: user.id },
       relations: ['reviews', 'reviews.product'],
     });
-    if (!userInfo.reviews) {
+    if (userInfo.reviews.length === 0) {
       return { message: '아직 리뷰가 없습니다!' };
     }
     const simplifiedReviews = userInfo.reviews.map((review) => ({
@@ -37,7 +37,7 @@ export class MypageService {
       where: { id: user.id },
       relations: ['likes', 'likes.product'],
     });
-    if (!userInfo.likes) {
+    if (userInfo.likes.length === 0) {
       return { message: '찜한 상품이 없습니다' };
     }
     const result = userInfo.likes.map((like) => ({
@@ -65,7 +65,7 @@ export class MypageService {
         'cart.cartItems.product',
       ],
     });
-    if (!userInfo.cart.cartItems) {
+    if (userInfo.cart.cartItems.length === 0) {
       return { message: '장바구니에 담긴 상품이 없습니다' };
     }
     const result = userInfo.cart.cartItems.map((items) => ({
