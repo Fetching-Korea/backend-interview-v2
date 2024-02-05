@@ -48,4 +48,28 @@ export class MypageService {
     }));
     return result;
   }
+
+  async getMyCart(user: User) {
+    const userInfo = await this.userRepository.findOne({
+      where: { id: user.id },
+      relations: [
+        'cart',
+        'cart.cartItems',
+        'cart.cartItems.productOption',
+        'cart.cartItems.product',
+      ],
+    });
+    const result = userInfo.cart.cartItems.map((items) => ({
+      id: items.id,
+      quantity: items.quantity,
+      productOption: items.productOption,
+      product: {
+        id: items.product.id,
+        name: items.product.name,
+        brand: items.product.brand,
+        price: items.product.price,
+      },
+    }));
+    return result;
+  }
 }
