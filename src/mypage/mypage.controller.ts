@@ -6,11 +6,16 @@ import { GetUser } from 'src/users/get-user.decorator';
 import { Review } from 'src/review/review.entity';
 
 @Controller('/auth/mypage')
+@UseGuards(AuthGuard())
 export class MypageController {
   constructor(private myPageService: MypageService) {}
   @Get('reviews')
-  @UseGuards(AuthGuard())
-  getMyReviews(@GetUser() user: User): Promise<Review[]> {
+  getMyReviews(@GetUser() user: User) {
     return this.myPageService.getMyReviews(user);
+  }
+
+  @Get('likes')
+  getMyLikes(@GetUser() user: User) {
+    return this.myPageService.getMyLikes(user);
   }
 }
