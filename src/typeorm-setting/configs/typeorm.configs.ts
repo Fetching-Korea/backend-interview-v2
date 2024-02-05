@@ -7,6 +7,7 @@ import { ProductOption } from 'src/product-option/product-option.entity';
 import { Like } from 'src/like/like.entity';
 import { CartItem } from 'src/cart-item/cart-item.entity';
 import { Cart } from 'src/cart/cart.entity';
+
 const dbConfig = config.get('db');
 export const typeORMConfig: TypeOrmModuleOptions = {
   type: dbConfig.type,
