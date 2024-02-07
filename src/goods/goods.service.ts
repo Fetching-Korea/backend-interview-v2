@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { GoodsEntity } from './entity/goods.entity';
 import { ProductEntity } from '../product/entity/product.entity';
 import { ColorEntity } from '../color/entity/color.entity';
-import { SizeEntity } from './entity/size.entity';
+import { SizeEntity } from '../size/entity/size.entity';
 
 @Injectable()
 export class GoodsService {

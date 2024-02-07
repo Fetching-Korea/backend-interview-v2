@@ -4,7 +4,7 @@ import { ProductEntity } from '../product/entity/product.entity';
 import { Repository } from 'typeorm';
 import { GoodsEntity } from './entity/goods.entity';
 import { ColorEntity } from '../color/entity/color.entity';
-import { SizeEntity } from './entity/size.entity';
+import { SizeEntity } from '../size/entity/size.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateGoodDto } from './dto/create-good.dto';
 
