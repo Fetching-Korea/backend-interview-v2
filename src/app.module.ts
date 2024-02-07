@@ -3,6 +3,7 @@ import { TypeOrmConfigService } from './config/typeorm.config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoggerMiddleware } from './common/logger.middleware';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { ConfigModule } from '@nestjs/config';
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
+    UserModule,
   ],
   controllers: [],
   providers: [],

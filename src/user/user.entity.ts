@@ -6,12 +6,12 @@ export class UserEntity extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 20 })
+  @Column({ unique: true, length: 20 })
   uId: string;
 
-  @Column()
+  @Column({ length: 64 })
   password: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 }
