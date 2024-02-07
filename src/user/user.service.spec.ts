@@ -1,9 +1,9 @@
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
-import { UserEntity } from './user.entity';
+import { UserEntity } from './entity/user.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { UserSignUpDto } from './user.dto';
+import { UserSignUpDto } from './dto/user.dto';
 import { PasswordBcryptEncrypt } from '../auth/password.bcrypt.encrypt';
 import {
   ConflictException,

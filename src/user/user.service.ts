@@ -4,10 +4,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UserEntity } from './user.entity';
+import { UserEntity } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserLoginDto, UserSignUpDto } from './user.dto';
+import { UserLoginDto, UserSignUpDto } from './dto/user.dto';
 import { PasswordBcryptEncrypt } from '../auth/password.bcrypt.encrypt';
 import { JwtService } from '@nestjs/jwt';
 
