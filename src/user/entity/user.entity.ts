@@ -16,4 +16,7 @@ export class UserEntity extends BaseTimeEntity {
 
   @Column({ unique: true })
   email: string;
+
+  @Column({ length: 40 })
+  name: string;
 }

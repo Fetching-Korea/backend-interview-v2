@@ -23,6 +23,9 @@ export class UserSignUpDto extends UserIdPassword {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+
+  @IsNotEmpty()
+  name: string;
 }
 
 export class UserLoginDto extends UserIdPassword {}

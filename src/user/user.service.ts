@@ -21,7 +21,7 @@ export class UserService {
   ) {}
 
   async signUp(signUpDto: UserSignUpDto) {
-    const { uId, password, email } = signUpDto;
+    const { uId, password, email, name } = signUpDto;
     const duplicateUser = await this.usersRepository.count({
       where: [
         {
@@ -39,6 +39,7 @@ export class UserService {
     newUser.uId = uId;
     newUser.password = await this.passwordEncrypt.encrypt(password);
     newUser.email = email;
+    newUser.name = name;
     await this.usersRepository.save(newUser);
 
     return;

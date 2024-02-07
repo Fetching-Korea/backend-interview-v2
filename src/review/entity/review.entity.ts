@@ -4,12 +4,14 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
-import { BaseTimeEntity } from '../common/base.entity';
-import { UserEntity } from '../user/entity/user.entity';
-import { ProductEntity } from '../product/entity/product.entity';
+import { BaseTimeEntity } from '../../common/base.entity';
+import { UserEntity } from '../../user/entity/user.entity';
+import { ProductEntity } from '../../product/entity/product.entity';
 
 @Entity('review')
+@Unique(['productId', 'userId'])
 export class ReviewEntity extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;

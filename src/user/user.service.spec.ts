@@ -68,6 +68,7 @@ describe('User Service Test', () => {
         uId: 'testtest',
         password: 'testsets1234!',
         email: 'test@gmail.com',
+        name: 'tees',
       };
       userRepository.count.mockResolvedValue(0);
       passwordEncrypt.encrypt.mockResolvedValue('encryptString');
@@ -78,6 +79,7 @@ describe('User Service Test', () => {
         uId: 'testtest',
         password: 'encryptString',
         email: 'test@gmail.com',
+        name: 'tees',
       });
     });
 
@@ -86,6 +88,7 @@ describe('User Service Test', () => {
         uId: 'testtest',
         password: 'testsets1234!',
         email: 'test@gmail.com',
+        name: 'tees',
       };
       userRepository.count.mockResolvedValue(1);
       passwordEncrypt.encrypt.mockResolvedValue('encryptString');

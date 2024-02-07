@@ -1,7 +1,7 @@
 import { BaseTimeEntity } from '../../common/base.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { GoodsEntity } from '../../goods/entity/goods.entity';
-import { ReviewEntity } from '../../review/review.entity';
+import { ReviewEntity } from '../../review/entity/review.entity';
 
 @Entity('product')
 export class ProductEntity extends BaseTimeEntity {
