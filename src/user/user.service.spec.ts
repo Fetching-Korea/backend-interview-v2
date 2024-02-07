@@ -5,23 +5,35 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserSignUpDto } from './user.dto';
 import { PasswordBcryptEncrypt } from '../auth/password.bcrypt.encrypt';
-import { ConflictException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
-const mockPostRepository = () => ({
+const mockUserRepository = () => ({
   save: jest.fn(),
   count: jest.fn(),
+  findOne: jest.fn(),
 });
 
 const mockPasswordEncrypt = {
   encrypt: jest.fn(),
+  compare: jest.fn(),
+};
+
+const mockJwtService = {
+  signAsync: jest.fn(),
 };
 
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 
-describe('PostService', () => {
+describe('User Service Test', () => {
   let sut: UserService;
   let userRepository: MockRepository<UserEntity>;
   let passwordEncrypt;
+  let jwtService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,11 +41,15 @@ describe('PostService', () => {
         UserService,
         {
           provide: getRepositoryToken(UserEntity),
-          useValue: mockPostRepository(),
+          useValue: mockUserRepository(),
         },
         {
           provide: PasswordBcryptEncrypt,
           useValue: mockPasswordEncrypt,
+        },
+        {
+          provide: JwtService,
+          useValue: mockJwtService,
         },
       ],
     }).compile();
@@ -43,6 +59,7 @@ describe('PostService', () => {
       getRepositoryToken(UserEntity),
     );
     passwordEncrypt = module.get<PasswordBcryptEncrypt>(PasswordBcryptEncrypt);
+    jwtService = module.get<JwtService>(JwtService);
   });
 
   describe('회원 가입 테스트', () => {
@@ -55,7 +72,7 @@ describe('PostService', () => {
       userRepository.count.mockResolvedValue(0);
       passwordEncrypt.encrypt.mockResolvedValue('encryptString');
 
-      const result = await sut.signUp(givenDto);
+      await sut.signUp(givenDto);
 
       expect(userRepository.save).toHaveBeenCalledWith({
         uId: 'testtest',
@@ -76,6 +93,66 @@ describe('PostService', () => {
       await expect(async () => {
         await sut.signUp(givenDto);
       }).rejects.toThrowError(new ConflictException('Already exist user id '));
+    });
+  });
+
+  describe('로그인 테스트', () => {
+    it('아이디 패스워드를 입력받아 로그인에 성공한 경우', async () => {
+      const givenDto = {
+        uId: 'testtest',
+        password: 'test',
+      };
+
+      const givenUser = {
+        id: 1,
+        uId: 'testtest',
+        password: 'tatsfzxvqwtqwrq',
+        email: 'test2@gmail.com',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      };
+      userRepository.findOne.mockResolvedValue(givenUser);
+      passwordEncrypt.compare.mockResolvedValue(true);
+      jwtService.signAsync.mockResolvedValue('success');
+
+      const result = await sut.login(givenDto);
+
+      expect(result.accessToken).toEqual('success');
+    });
+    it('입력받은 아이디의 user가 존재하지 않는 경우', async () => {
+      const givenDto = {
+        uId: 'testtest',
+        password: 'test',
+      };
+      userRepository.findOne.mockResolvedValue(null);
+
+      await expect(async () => {
+        await sut.login(givenDto);
+      }).rejects.toThrowError(new NotFoundException('user not exist'));
+    });
+    it('비밀번호가 일치하지 않는 경우', async () => {
+      const givenDto = {
+        uId: 'testtest',
+        password: 'test',
+      };
+
+      const givenUser = {
+        id: 1,
+        uId: 'testtest',
+        password: 'tatsfzxvqwtqwrq',
+        email: 'test2@gmail.com',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+      };
+
+      userRepository.findOne.mockResolvedValue(givenUser);
+      passwordEncrypt.compare.mockResolvedValue(false);
+
+      await expect(async () => {
+        await sut.login(givenDto);
+      }).rejects.toThrowError(new ForbiddenException('password not match'));
     });
   });
 });

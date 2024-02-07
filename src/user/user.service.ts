@@ -1,9 +1,15 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserSignUpDto } from './user.dto';
+import { UserLoginDto, UserSignUpDto } from './user.dto';
 import { PasswordBcryptEncrypt } from '../auth/password.bcrypt.encrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
@@ -11,6 +17,7 @@ export class UserService {
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
     private passwordEncrypt: PasswordBcryptEncrypt,
+    private jwtService: JwtService,
   ) {}
 
   async signUp(signUpDto: UserSignUpDto) {
@@ -35,5 +42,26 @@ export class UserService {
     await this.usersRepository.save(newUser);
 
     return;
+  }
+
+  async login(loginDto: UserLoginDto) {
+    const { uId, password } = loginDto;
+    const user = await this.usersRepository.findOne({ where: { uId } });
+    if (!user) {
+      throw new NotFoundException('user not exist');
+    }
+    const isPasswordMatch = await this.passwordEncrypt.compare(
+      password,
+      user.password,
+    );
+    if (!isPasswordMatch) {
+      throw new ForbiddenException('password not match');
+    }
+    const payload = { id: user.id, uId, email: user.email };
+    const accessToken = await this.jwtService.signAsync(payload);
+
+    return {
+      accessToken,
+    };
   }
 }
