@@ -1,6 +1,6 @@
 import { BaseTimeEntity } from '../../common/base.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { GoodsEntity } from './goods.entity';
+import { GoodsEntity } from '../../goods/entity/goods.entity';
 import { ReviewEntity } from '../../review/review.entity';
 
 @Entity('product')

@@ -1,16 +1,19 @@
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { BaseTimeEntity } from '../../common/base.entity';
-import { ProductEntity } from './product.entity';
+import { ProductEntity } from '../../product/entity/product.entity';
 import { ColorEntity } from './color.entity';
 import { SizeEntity } from './size.entity';
 
 @Entity('goods')
+@Unique(['sizeId', 'colorId', 'productId'])
 export class GoodsEntity extends BaseTimeEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,6 +25,7 @@ export class GoodsEntity extends BaseTimeEntity {
   colorId: number;
 
   @Column()
+  @Index()
   productId: number;
 
   @ManyToOne(() => ProductEntity)
