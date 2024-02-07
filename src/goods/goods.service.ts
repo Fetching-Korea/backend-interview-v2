@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { GoodsEntity } from './entity/goods.entity';
 import { ProductEntity } from '../product/entity/product.entity';
-import { ColorEntity } from './entity/color.entity';
+import { ColorEntity } from '../color/entity/color.entity';
 import { SizeEntity } from './entity/size.entity';
 
 @Injectable()

@@ -3,7 +3,7 @@ import { GoodsService } from './goods.service';
 import { ProductEntity } from '../product/entity/product.entity';
 import { Repository } from 'typeorm';
 import { GoodsEntity } from './entity/goods.entity';
-import { ColorEntity } from './entity/color.entity';
+import { ColorEntity } from '../color/entity/color.entity';
 import { SizeEntity } from './entity/size.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateGoodDto } from './dto/create-good.dto';
@@ -91,7 +91,7 @@ describe('GoodsService', () => {
             deletedAt: null,
             id: 1,
             name: 'test',
-            code: 'test',
+            code: '#FFFFFF',
           },
           size: {
             createdAt: new Date('2024-02-07T13:18:16.207Z'),

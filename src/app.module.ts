@@ -7,6 +7,8 @@ import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
 import { ReviewModule } from './review/review.module';
 import { GoodsModule } from './goods/goods.module';
+import { ColorModule } from './color/color.module';
+import { SizeModule } from './size/size.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { GoodsModule } from './goods/goods.module';
     ProductModule,
     ReviewModule,
     GoodsModule,
+    ColorModule,
+    SizeModule,
   ],
   controllers: [],
   providers: [],

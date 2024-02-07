@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { BaseTimeEntity } from '../../common/base.entity';
 import { ProductEntity } from '../../product/entity/product.entity';
-import { ColorEntity } from './color.entity';
+import { ColorEntity } from '../../color/entity/color.entity';
 import { SizeEntity } from './size.entity';
 
 @Entity('goods')
