@@ -11,8 +11,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { ProductCreateDto } from './dto/create-product.dto';
-import { ProductUpdateDto } from './dto/update-product.dto';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductSortPipe } from '../common/product-sort.pipe';
 
 @Controller('product')
@@ -47,13 +47,13 @@ export class ProductController {
   }
 
   @Post()
-  async create(@Body() createDto: ProductCreateDto) {
+  async create(@Body() createDto: CreateProductDto) {
     await this.productService.create(createDto);
     return;
   }
 
   @Patch()
-  async update(@Body() updateDto: ProductUpdateDto) {
+  async update(@Body() updateDto: UpdateProductDto) {
     await this.productService.update(updateDto);
     return true;
   }

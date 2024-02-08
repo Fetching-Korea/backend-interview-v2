@@ -3,8 +3,8 @@ import { ProductService } from './product.service';
 import { ProductEntity } from './entity/product.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ProductCreateDto } from './dto/create-product.dto';
-import { ProductUpdateDto } from './dto/update-product.dto';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { NotFoundException } from '@nestjs/common';
 
 const mockProductRepository = () => ({
@@ -46,7 +46,7 @@ describe('ProductService', () => {
 
   describe('물품 생성 기능', () => {
     it('물품 생성에 성공한 경우', async () => {
-      const givenDto: ProductCreateDto = {
+      const givenDto: CreateProductDto = {
         name: 'test',
         description: 'test',
         brandName: 'test',
@@ -69,7 +69,7 @@ describe('ProductService', () => {
 
   describe('물품 업데이트 기능', () => {
     it('물품 업데이트에 성공한 경우', async () => {
-      const givenDto: ProductUpdateDto = {
+      const givenDto: UpdateProductDto = {
         id: 1,
         name: 'testChange',
         description: 'testChange',
@@ -102,7 +102,7 @@ describe('ProductService', () => {
     });
 
     it('해당 ID 물품이 존재하지 않아 저장에 실패한 경우', async () => {
-      const givenDto: ProductUpdateDto = {
+      const givenDto: UpdateProductDto = {
         id: 1,
         name: 'testChange',
         description: 'testChange',
